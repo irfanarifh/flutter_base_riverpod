@@ -1,0 +1,4 @@
+#include "Generated.xcconfig"
+
+BUNDLE_ID_SUFFIX=.dev
+APP_DISPLAY_NAME=App (Dev)

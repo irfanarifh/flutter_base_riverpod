@@ -1,0 +1,20 @@
+# flutter_launcher_icons.yaml
+# Configuration for generating multi-platform application launcher icons.
+#
+# FLAVORS NOTE:
+# For flavor-specific launcher icons (e.g. different badges or colors for dev, staging, prod),
+# you can split into separate config files:
+#   - flutter_launcher_icons-dev.yaml
+#   - flutter_launcher_icons-staging.yaml
+#   - flutter_launcher_icons-prod.yaml
+# Then invoke:
+#   dart run flutter_launcher_icons -f flutter_launcher_icons-dev.yaml
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icons/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icons/app_icon_foreground.png"

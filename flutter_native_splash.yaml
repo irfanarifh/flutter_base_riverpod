@@ -1,0 +1,27 @@
+# flutter_native_splash.yaml
+# Configuration for native splash screen generation.
+#
+# FLAVORS NOTE:
+# To generate flavor-specific native splash screens (e.g. dev, staging, prod),
+# you can define separate flavor files:
+#   - flutter_native_splash-dev.yaml
+#   - flutter_native_splash-staging.yaml
+#   - flutter_native_splash-prod.yaml
+# And run:
+#   dart run flutter_native_splash:create --path=flutter_native_splash-dev.yaml
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  color_dark: "#121212"
+  image: "assets/images/splash.png"
+  image_dark: "assets/images/splash_dark.png"
+
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#121212"
+    image: "assets/images/splash.png"
+    image_dark: "assets/images/splash_dark.png"
+
+  android: true
+  ios: true
+  web: false

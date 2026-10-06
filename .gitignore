@@ -1,0 +1,52 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Flutter/Dart specific
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Generated localizations
+lib/app/l10n/app_localizations*.dart
+
+# Symbol files
+app.*.symbols
+app.*.map.json
+
+# Environment configuration:
+# .env.example and .env.prod.example are committed as templates.
+# Real .env.dev, .env.staging, and .env.prod files must be ignored
+# if they contain real API keys, secrets, or internal domains.
+.env.dev
+.env.staging
+.env.prod
+!.env.example
+!.env.prod.example
+
+# Exceptions to ignore rules
+!default.mode1v3
+!default.mode2v3
+!default.pbxuser
+!default.perspectivev3

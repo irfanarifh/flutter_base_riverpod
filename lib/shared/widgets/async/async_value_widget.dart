@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/shared/widgets/feedback/empty_view.dart';
@@ -61,9 +61,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
       },
       data: (result) {
         if (isEmpty != null && isEmpty!(result)) {
-          return empty != null
-              ? empty!()
-              : const EmptyView(title: 'No items found');
+          return empty != null ? empty!() : const EmptyView(title: 'No items found');
         }
         return data(result);
       },

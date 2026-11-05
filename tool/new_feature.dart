@@ -50,7 +50,7 @@ part '$featureName.g.dart';
 
 /// Immutable domain model for [$pascalName].
 @freezed
-class $pascalName with _\$$pascalName {
+abstract class $pascalName with _\$$pascalName {
   const factory $pascalName({
     required String id,
     required String title,

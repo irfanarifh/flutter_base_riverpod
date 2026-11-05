@@ -1,21 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/core/network/dio_provider.dart';
 import 'package:flutter_template/core/network/interceptors/auth_interceptor.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/mocks.dart';
 
-class MockResponseInterceptorHandler extends Mock
-    implements ResponseInterceptorHandler {}
+class MockResponseInterceptorHandler extends Mock implements ResponseInterceptorHandler {}
 
-class MockRequestInterceptorHandler extends Mock
-    implements RequestInterceptorHandler {}
+class MockRequestInterceptorHandler extends Mock implements RequestInterceptorHandler {}
 
-class MockErrorInterceptorHandler extends Mock
-    implements ErrorInterceptorHandler {}
+class MockErrorInterceptorHandler extends Mock implements ErrorInterceptorHandler {}
 
 class FakeDioException extends Fake implements DioException {}
 
@@ -34,7 +31,7 @@ void main() {
   setUp(() {
     mockStorageService = MockStorageService();
     when(() => mockStorageService.deleteToken()).thenAnswer((_) => Future.value());
-    container = ProviderContainer();
+    container = ProviderContainer(retry: (retryCount, error) => null);
     final ref = container.read(Provider((ref) => ref));
     interceptor = AuthInterceptor(
       storageService: mockStorageService,
@@ -48,8 +45,7 @@ void main() {
 
   group('AuthInterceptor', () {
     test('onRequest attaches Bearer token if present', () async {
-      when(() => mockStorageService.readToken())
-          .thenAnswer((_) async => 'valid_token_xyz');
+      when(() => mockStorageService.readToken()).thenAnswer((_) async => 'valid_token_xyz');
 
       final options = RequestOptions(path: '/test');
       final handler = MockRequestInterceptorHandler();
@@ -92,8 +88,7 @@ void main() {
       expect(captured.first, isA<DioException>());
       final dioException = captured.first as DioException;
       expect(dioException.error, isA<UnauthorizedException>());
-      expect((dioException.error as UnauthorizedException).message,
-          'Session expired, please log in again');
+      expect((dioException.error as UnauthorizedException).message, 'Session expired, please log in again');
     });
 
     test('onError triggers sessionExpired when response status is 401', () async {

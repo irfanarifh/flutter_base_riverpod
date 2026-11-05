@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_template/shared/widgets/inputs/app_text_field.dart';
 
 /// Secure text field with built-in visibility toggle icon.

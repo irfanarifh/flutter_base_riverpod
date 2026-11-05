@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,201 +9,278 @@ part of 'paginated_result.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$PaginatedResult<T> {
-  List<T> get items => throw _privateConstructorUsedError;
-  int get totalCount => throw _privateConstructorUsedError;
-  int get page => throw _privateConstructorUsedError;
-  bool get hasMore => throw _privateConstructorUsedError;
 
-  /// Create a copy of PaginatedResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $PaginatedResultCopyWith<T, PaginatedResult<T>> get copyWith =>
-      throw _privateConstructorUsedError;
+ List<T> get items; int get totalCount; int get page; bool get hasMore;
+/// Create a copy of PaginatedResult
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PaginatedResultCopyWith<T, PaginatedResult<T>> get copyWith => _$PaginatedResultCopyWithImpl<T, PaginatedResult<T>>(this as PaginatedResult<T>, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PaginatedResult<T>&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.page, page) || other.page == page)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(items),totalCount,page,hasMore);
+
+@override
+String toString() {
+  return 'PaginatedResult<$T>(items: $items, totalCount: $totalCount, page: $page, hasMore: $hasMore)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $PaginatedResultCopyWith<T, $Res> {
-  factory $PaginatedResultCopyWith(
-          PaginatedResult<T> value, $Res Function(PaginatedResult<T>) then) =
-      _$PaginatedResultCopyWithImpl<T, $Res, PaginatedResult<T>>;
-  @useResult
-  $Res call({List<T> items, int totalCount, int page, bool hasMore});
-}
+abstract mixin class $PaginatedResultCopyWith<T,$Res>  {
+  factory $PaginatedResultCopyWith(PaginatedResult<T> value, $Res Function(PaginatedResult<T>) _then) = _$PaginatedResultCopyWithImpl;
+@useResult
+$Res call({
+ List<T> items, int totalCount, int page, bool hasMore
+});
 
+
+
+
+}
 /// @nodoc
-class _$PaginatedResultCopyWithImpl<T, $Res, $Val extends PaginatedResult<T>>
+class _$PaginatedResultCopyWithImpl<T,$Res>
     implements $PaginatedResultCopyWith<T, $Res> {
-  _$PaginatedResultCopyWithImpl(this._value, this._then);
+  _$PaginatedResultCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final PaginatedResult<T> _self;
+  final $Res Function(PaginatedResult<T>) _then;
 
-  /// Create a copy of PaginatedResult
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? items = null,
-    Object? totalCount = null,
-    Object? page = null,
-    Object? hasMore = null,
-  }) {
-    return _then(_value.copyWith(
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<T>,
-      totalCount: null == totalCount
-          ? _value.totalCount
-          : totalCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      page: null == page
-          ? _value.page
-          : page // ignore: cast_nullable_to_non_nullable
-              as int,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
-  }
+/// Create a copy of PaginatedResult
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? items = null,Object? totalCount = null,Object? page = null,Object? hasMore = null,}) {
+  return _then(_self.copyWith(
+items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
+as List<T>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
+as int,page: null == page ? _self.page : page // ignore: cast_nullable_to_non_nullable
+as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [PaginatedResult].
+extension PaginatedResultPatterns<T> on PaginatedResult<T> {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _PaginatedResult<T> value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _PaginatedResult() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _PaginatedResult<T> value)  $default,){
+final _that = this;
+switch (_that) {
+case _PaginatedResult():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _PaginatedResult<T> value)?  $default,){
+final _that = this;
+switch (_that) {
+case _PaginatedResult() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<T> items,  int totalCount,  int page,  bool hasMore)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _PaginatedResult() when $default != null:
+return $default(_that.items,_that.totalCount,_that.page,_that.hasMore);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<T> items,  int totalCount,  int page,  bool hasMore)  $default,) {final _that = this;
+switch (_that) {
+case _PaginatedResult():
+return $default(_that.items,_that.totalCount,_that.page,_that.hasMore);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<T> items,  int totalCount,  int page,  bool hasMore)?  $default,) {final _that = this;
+switch (_that) {
+case _PaginatedResult() when $default != null:
+return $default(_that.items,_that.totalCount,_that.page,_that.hasMore);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$PaginatedResultImplCopyWith<T, $Res>
-    implements $PaginatedResultCopyWith<T, $Res> {
-  factory _$$PaginatedResultImplCopyWith(_$PaginatedResultImpl<T> value,
-          $Res Function(_$PaginatedResultImpl<T>) then) =
-      __$$PaginatedResultImplCopyWithImpl<T, $Res>;
-  @override
-  @useResult
-  $Res call({List<T> items, int totalCount, int page, bool hasMore});
+
+
+class _PaginatedResult<T> implements PaginatedResult<T> {
+  const _PaginatedResult({required final  List<T> items, required this.totalCount, required this.page, required this.hasMore}): _items = items;
+  
+
+ final  List<T> _items;
+@override List<T> get items {
+  if (_items is EqualUnmodifiableListView) return _items;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_items);
+}
+
+@override final  int totalCount;
+@override final  int page;
+@override final  bool hasMore;
+
+/// Create a copy of PaginatedResult
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$PaginatedResultCopyWith<T, _PaginatedResult<T>> get copyWith => __$PaginatedResultCopyWithImpl<T, _PaginatedResult<T>>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PaginatedResult<T>&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.page, page) || other.page == page)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_items),totalCount,page,hasMore);
+
+@override
+String toString() {
+  return 'PaginatedResult<$T>(items: $items, totalCount: $totalCount, page: $page, hasMore: $hasMore)';
+}
+
+
 }
 
 /// @nodoc
-class __$$PaginatedResultImplCopyWithImpl<T, $Res>
-    extends _$PaginatedResultCopyWithImpl<T, $Res, _$PaginatedResultImpl<T>>
-    implements _$$PaginatedResultImplCopyWith<T, $Res> {
-  __$$PaginatedResultImplCopyWithImpl(_$PaginatedResultImpl<T> _value,
-      $Res Function(_$PaginatedResultImpl<T>) _then)
-      : super(_value, _then);
+abstract mixin class _$PaginatedResultCopyWith<T,$Res> implements $PaginatedResultCopyWith<T, $Res> {
+  factory _$PaginatedResultCopyWith(_PaginatedResult<T> value, $Res Function(_PaginatedResult<T>) _then) = __$PaginatedResultCopyWithImpl;
+@override @useResult
+$Res call({
+ List<T> items, int totalCount, int page, bool hasMore
+});
 
-  /// Create a copy of PaginatedResult
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? items = null,
-    Object? totalCount = null,
-    Object? page = null,
-    Object? hasMore = null,
-  }) {
-    return _then(_$PaginatedResultImpl<T>(
-      items: null == items
-          ? _value._items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<T>,
-      totalCount: null == totalCount
-          ? _value.totalCount
-          : totalCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      page: null == page
-          ? _value.page
-          : page // ignore: cast_nullable_to_non_nullable
-              as int,
-      hasMore: null == hasMore
-          ? _value.hasMore
-          : hasMore // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
-  }
+
+
+
 }
-
 /// @nodoc
+class __$PaginatedResultCopyWithImpl<T,$Res>
+    implements _$PaginatedResultCopyWith<T, $Res> {
+  __$PaginatedResultCopyWithImpl(this._self, this._then);
 
-class _$PaginatedResultImpl<T> implements _PaginatedResult<T> {
-  const _$PaginatedResultImpl(
-      {required final List<T> items,
-      required this.totalCount,
-      required this.page,
-      required this.hasMore})
-      : _items = items;
+  final _PaginatedResult<T> _self;
+  final $Res Function(_PaginatedResult<T>) _then;
 
-  final List<T> _items;
-  @override
-  List<T> get items {
-    if (_items is EqualUnmodifiableListView) return _items;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_items);
-  }
-
-  @override
-  final int totalCount;
-  @override
-  final int page;
-  @override
-  final bool hasMore;
-
-  @override
-  String toString() {
-    return 'PaginatedResult<$T>(items: $items, totalCount: $totalCount, page: $page, hasMore: $hasMore)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PaginatedResultImpl<T> &&
-            const DeepCollectionEquality().equals(other._items, _items) &&
-            (identical(other.totalCount, totalCount) ||
-                other.totalCount == totalCount) &&
-            (identical(other.page, page) || other.page == page) &&
-            (identical(other.hasMore, hasMore) || other.hasMore == hasMore));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_items), totalCount, page, hasMore);
-
-  /// Create a copy of PaginatedResult
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$PaginatedResultImplCopyWith<T, _$PaginatedResultImpl<T>> get copyWith =>
-      __$$PaginatedResultImplCopyWithImpl<T, _$PaginatedResultImpl<T>>(
-          this, _$identity);
+/// Create a copy of PaginatedResult
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? items = null,Object? totalCount = null,Object? page = null,Object? hasMore = null,}) {
+  return _then(_PaginatedResult<T>(
+items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
+as List<T>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
+as int,page: null == page ? _self.page : page // ignore: cast_nullable_to_non_nullable
+as int,hasMore: null == hasMore ? _self.hasMore : hasMore // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
 }
 
-abstract class _PaginatedResult<T> implements PaginatedResult<T> {
-  const factory _PaginatedResult(
-      {required final List<T> items,
-      required final int totalCount,
-      required final int page,
-      required final bool hasMore}) = _$PaginatedResultImpl<T>;
 
-  @override
-  List<T> get items;
-  @override
-  int get totalCount;
-  @override
-  int get page;
-  @override
-  bool get hasMore;
-
-  /// Create a copy of PaginatedResult
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PaginatedResultImplCopyWith<T, _$PaginatedResultImpl<T>> get copyWith =>
-      throw _privateConstructorUsedError;
 }
+
+// dart format on

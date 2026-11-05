@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_template/core/theme/app_spacing.dart';
 
 /// Centered or inline loading spinner widget with optional status message.

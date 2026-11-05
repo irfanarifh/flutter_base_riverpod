@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/config/env.dart';
 import 'package:flutter_template/core/extensions/context_extension.dart';
@@ -14,13 +14,7 @@ import 'package:flutter_template/shared/widgets/layout/section_header.dart';
 /// Settings screen providing theme, localization, application information,
 /// and decoupled session termination.
 class SettingsScreen extends ConsumerStatefulWidget {
-  const SettingsScreen({
-    super.key,
-    this.onLogout,
-  });
-
-  /// Optional callback to trigger logout. If null, falls back to [logoutActionProvider].
-  final Future<void> Function()? onLogout;
+  const SettingsScreen({super.key});
 
   @override
   ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
@@ -31,19 +25,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final confirmed = await ConfirmDialog.show(
       context,
       title: context.l10n.logout,
-      message: 'Are you sure you want to log out of your account?',
+      message: context.l10n.logoutConfirmMessage,
       confirmLabel: context.l10n.logout,
       cancelLabel: context.l10n.cancel,
       isDestructive: true,
     );
 
     if (confirmed && mounted) {
-      final logoutCallback = widget.onLogout;
-      if (logoutCallback != null) {
-        await logoutCallback();
-      } else {
-        await ref.read(logoutActionProvider)();
-      }
+      await ref.read(logoutActionProvider)();
     }
   }
 
@@ -86,9 +75,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ],
               selected: {currentTheme},
               onSelectionChanged: (selection) {
-                ref
-                    .read(themeModeControllerProvider.notifier)
-                    .setThemeMode(selection.first);
+                ref.read(themeModeControllerProvider.notifier).setThemeMode(selection.first);
               },
             ),
           ),
@@ -111,9 +98,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ],
               selected: {currentLocale?.languageCode ?? 'en'},
               onSelectionChanged: (selection) {
-                ref
-                    .read(localeControllerProvider.notifier)
-                    .setLocale(Locale(selection.first));
+                ref.read(localeControllerProvider.notifier).setLocale(Locale(selection.first));
               },
             ),
           ),

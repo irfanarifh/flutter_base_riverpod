@@ -1,4 +1,5 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
+import 'package:flutter_template/core/network/api_unwrap.dart';
 import 'package:flutter_template/features/example/model/example_item.dart';
 
 /// Minimal remote REST API client for the example feature.
@@ -12,11 +13,12 @@ class ExampleApi {
   final Dio _dio;
 
   /// Fetches all items from the remote server endpoint.
+  ///
+  /// Response shape: `{code, message, data: [ ... ]}`.
   Future<List<ExampleItemDto>> fetchAll() async {
-    final response = await _dio.get<List<dynamic>>('/examples');
-    final data = response.data ?? <dynamic>[];
-    return data
-        .map((json) => ExampleItemDto.fromJson(json as Map<String, dynamic>))
-        .toList();
+    final response = await _dio.get<Map<String, dynamic>>('/examples');
+    return response.unwrap(
+      (json) => (json! as List<dynamic>).map((e) => ExampleItemDto.fromJson(e as Map<String, dynamic>)).toList(),
+    );
   }
 }

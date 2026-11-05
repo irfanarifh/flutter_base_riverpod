@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_template/core/theme/app_spacing.dart';
 
 /// Standard themed text input field with validation and icon support.

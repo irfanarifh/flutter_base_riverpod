@@ -5,6 +5,7 @@
   "email": "Email",
   "password": "Password",
   "logout": "Logout",
+  "logoutConfirmMessage": "Are you sure you want to log out of your account?",
   "home": "Home",
   "example": "Example",
   "settings": "Settings",

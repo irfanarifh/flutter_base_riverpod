@@ -1,5 +1,5 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_template/features/auth/controller/auth_controller.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'login_controller.g.dart';
 
@@ -14,9 +14,11 @@ class LoginController extends _$LoginController {
   /// Submits credentials to [AuthController] and guards against uncaught errors.
   Future<bool> submit(String email, String password) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       await ref.read(authControllerProvider.notifier).login(email, password);
     });
+    if (!ref.mounted) return false;
+    state = result;
     return !state.hasError;
   }
 }

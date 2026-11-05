@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/core/extensions/string_extension.dart';
+import 'package:flutter_template/core/network/api_unwrap.dart';
 import 'package:flutter_template/features/auth/model/auth_token.dart';
 import 'package:flutter_template/features/auth/model/login_request.dart';
 import 'package:flutter_template/features/auth/model/user.dart';
@@ -41,6 +42,9 @@ class MockAuthApi implements AuthApi {
 }
 
 /// Real HTTP authentication API consuming backend endpoints.
+///
+/// Expects the `{code, message, data}` envelope; failing codes are rejected by
+/// `ApiResponseInterceptor` before reaching these methods.
 class RealAuthApi implements AuthApi {
   const RealAuthApi(this._dio);
 
@@ -52,8 +56,9 @@ class RealAuthApi implements AuthApi {
       '/auth/login',
       data: request.toJson(),
     );
-    final data = response.data?['data'] ?? response.data;
-    return AuthToken.fromJson(data as Map<String, dynamic>);
+    return response.unwrap(
+      (json) => AuthToken.fromJson(json! as Map<String, dynamic>),
+    );
   }
 
   @override
@@ -64,7 +69,8 @@ class RealAuthApi implements AuthApi {
         headers: {'Authorization': 'Bearer $token'},
       ),
     );
-    final data = response.data?['data'] ?? response.data;
-    return User.fromJson(data as Map<String, dynamic>);
+    return response.unwrap(
+      (json) => User.fromJson(json! as Map<String, dynamic>),
+    );
   }
 }

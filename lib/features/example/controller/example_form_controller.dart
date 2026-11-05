@@ -1,6 +1,6 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_template/features/example/controller/example_detail_controller.dart';
 import 'package:flutter_template/features/example/data/example_repository.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'example_form_controller.g.dart';
 
@@ -18,12 +18,14 @@ class ExampleFormController extends _$ExampleFormController {
     String? note,
   }) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       await ref.read(exampleRepositoryProvider).add(
             title: title,
             note: note,
           );
     });
+    if (!ref.mounted) return false;
+    state = result;
     return !state.hasError;
   }
 
@@ -34,7 +36,7 @@ class ExampleFormController extends _$ExampleFormController {
     String? note,
   }) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       await ref.read(exampleRepositoryProvider).update(
             id: id,
             title: title,
@@ -42,16 +44,20 @@ class ExampleFormController extends _$ExampleFormController {
           );
       ref.invalidate(exampleDetailControllerProvider(id));
     });
+    if (!ref.mounted) return false;
+    state = result;
     return !state.hasError;
   }
 
   /// Deletes an existing example item by [id]. Returns `true` if operation succeeded.
   Future<bool> deleteItem(int id) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       await ref.read(exampleRepositoryProvider).remove(id);
       ref.invalidate(exampleDetailControllerProvider(id));
     });
+    if (!ref.mounted) return false;
+    state = result;
     return !state.hasError;
   }
 }

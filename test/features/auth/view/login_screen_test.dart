@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_template/features/auth/data/auth_repository_provider.dart';
 import 'package:flutter_template/features/auth/view/login_screen.dart';
 import 'package:flutter_template/shared/widgets/buttons/primary_button.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mocks.dart';
@@ -13,8 +13,7 @@ void main() {
 
   setUp(() {
     mockAuthRepository = MockAuthRepository();
-    when(() => mockAuthRepository.restoreSession())
-        .thenAnswer((_) async => null);
+    when(() => mockAuthRepository.restoreSession()).thenAnswer((_) async => null);
   });
 
   group('LoginScreen', () {
@@ -41,8 +40,7 @@ void main() {
     });
 
     testWidgets('calls login on repository when valid input is submitted', (tester) async {
-      when(() => mockAuthRepository.login('test@example.com', 'password123'))
-          .thenAnswer((_) async => TestFixtures.testUser);
+      when(() => mockAuthRepository.login('test@example.com', 'password123')).thenAnswer((_) async => TestFixtures.testUser);
 
       await tester.pumpApp(
         child: const LoginScreen(),
@@ -65,8 +63,7 @@ void main() {
       await tester.tap(loginButton);
       await tester.pumpAndSettle();
 
-      verify(() => mockAuthRepository.login('test@example.com', 'password123'))
-          .called(1);
+      verify(() => mockAuthRepository.login('test@example.com', 'password123')).called(1);
     });
   });
 }

@@ -1,4 +1,4 @@
-import 'package:flutter_template/core/errors/app_exception.dart';
+﻿import 'package:flutter_template/core/errors/app_exception.dart';
 
 class Failure {
   const Failure({

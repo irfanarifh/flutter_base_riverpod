@@ -1,4 +1,4 @@
-// =============================================================================
+﻿// =============================================================================
 // HOW TO REMOVE THIS FEATURE
 // =============================================================================
 // 1. Delete folder: `lib/features/example/`.
@@ -44,9 +44,7 @@ class ExampleRepository {
   /// Emits a reactive stream of all domain [ExampleItem]s matching [search].
   Stream<List<ExampleItem>> watchItems({String? search}) {
     try {
-      return _dao
-          .watchAll(search: search)
-          .map((rows) => rows.map(ExampleMapper.fromDrift).toList());
+      return _dao.watchAll(search: search).map((rows) => rows.map(ExampleMapper.fromDrift).toList());
     } catch (e, stackTrace) {
       throw CacheException(
         'Failed to observe example items: $e',

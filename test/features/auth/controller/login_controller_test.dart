@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/features/auth/controller/login_controller.dart';
 import 'package:flutter_template/features/auth/data/auth_repository_provider.dart';
 import 'package:flutter_template/features/auth/model/user.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mocks.dart';
@@ -16,10 +17,10 @@ void main() {
   setUp(() {
     mockAuthRepository = MockAuthRepository();
     // Default restoreSession behavior for AuthController initialization
-    when(() => mockAuthRepository.restoreSession())
-        .thenAnswer((_) async => null);
+    when(() => mockAuthRepository.restoreSession()).thenAnswer((_) async => null);
 
     container = ProviderContainer(
+      retry: (retryCount, error) => null,
       overrides: [
         authRepositoryProvider.overrideWithValue(mockAuthRepository),
       ],
@@ -37,29 +38,22 @@ void main() {
     });
 
     test('submit succeeds and returns true on valid credentials', () async {
-      when(() => mockAuthRepository.login('test@example.com', 'password123'))
-          .thenAnswer((_) async => TestFixtures.testUser);
+      when(() => mockAuthRepository.login('test@example.com', 'password123')).thenAnswer((_) async => TestFixtures.testUser);
 
-      final success = await container
-          .read(loginControllerProvider.notifier)
-          .submit('test@example.com', 'password123');
+      final success = await container.read(loginControllerProvider.notifier).submit('test@example.com', 'password123');
 
       expect(success, isTrue);
       final state = container.read(loginControllerProvider);
       expect(state.hasError, isFalse);
       expect(state.isLoading, isFalse);
-      verify(() => mockAuthRepository.login('test@example.com', 'password123'))
-          .called(1);
+      verify(() => mockAuthRepository.login('test@example.com', 'password123')).called(1);
     });
 
     test('submit sets AsyncError and returns false when repository throws', () async {
       const exception = UnauthorizedException('Invalid credentials');
-      when(() => mockAuthRepository.login('test@example.com', 'wrongpassword'))
-          .thenThrow(exception);
+      when(() => mockAuthRepository.login('test@example.com', 'wrongpassword')).thenThrow(exception);
 
-      final success = await container
-          .read(loginControllerProvider.notifier)
-          .submit('test@example.com', 'wrongpassword');
+      final success = await container.read(loginControllerProvider.notifier).submit('test@example.com', 'wrongpassword');
 
       expect(success, isFalse);
       final state = container.read(loginControllerProvider);
@@ -70,12 +64,9 @@ void main() {
 
     test('transitions through AsyncLoading during submission', () async {
       final completer = Completer<User>();
-      when(() => mockAuthRepository.login(any(), any()))
-          .thenAnswer((_) => completer.future);
+      when(() => mockAuthRepository.login(any(), any())).thenAnswer((_) => completer.future);
 
-      final future = container
-          .read(loginControllerProvider.notifier)
-          .submit('test@example.com', 'password123');
+      final future = container.read(loginControllerProvider.notifier).submit('test@example.com', 'password123');
 
       // State is immediately loading while pending
       expect(container.read(loginControllerProvider).isLoading, isTrue);

@@ -5,7 +5,7 @@ part 'login_request.g.dart';
 
 /// Credentials payload for authentication requests.
 @freezed
-class LoginRequest with _$LoginRequest {
+abstract class LoginRequest with _$LoginRequest {
   const factory LoginRequest({
     required String email,
     required String password,

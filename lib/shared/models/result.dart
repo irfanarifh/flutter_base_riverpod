@@ -1,4 +1,4 @@
-import 'package:flutter_template/core/errors/app_exception.dart';
+﻿import 'package:flutter_template/core/errors/app_exception.dart';
 
 /// A discriminated union representing either a successful [data] payload
 /// or a typed [exception] failure.
@@ -9,8 +9,7 @@ sealed class Result<T> {
   const factory Result.success(T data) = Success<T>;
 
   /// Creates a failed result holding an [exception] and optional [stackTrace].
-  const factory Result.failure(AppException exception, [StackTrace? stackTrace]) =
-      FailureResult<T>;
+  const factory Result.failure(AppException exception, [StackTrace? stackTrace]) = FailureResult<T>;
 
   /// Returns `true` if this instance is a [Success].
   bool get isSuccess => this is Success<T>;
@@ -37,8 +36,7 @@ sealed class Result<T> {
   }) {
     return switch (this) {
       Success(:final data) => success(data),
-      FailureResult(:final exception, :final stackTrace) =>
-        failure(exception, stackTrace),
+      FailureResult(:final exception, :final stackTrace) => failure(exception, stackTrace),
     };
   }
 }

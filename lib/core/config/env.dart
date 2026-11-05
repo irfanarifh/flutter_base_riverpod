@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show kReleaseMode;
+﻿import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_template/core/config/flavor.dart';
 import 'package:flutter_template/core/services/logger_service.dart';
@@ -25,8 +25,18 @@ abstract final class Env {
     return url.trim();
   }
 
-  static bool get enableLogging =>
-      dotenv.get('ENABLE_LOGGING', fallback: 'false').toLowerCase() == 'true';
+  /// Safe to call before dotenv is loaded (returns `false`), so error
+  /// reporting never throws while bootstrap itself is failing.
+  static bool get enableLogging {
+    if (!dotenv.isInitialized) return false;
+    return dotenv.get('ENABLE_LOGGING', fallback: 'false').toLowerCase() == 'true';
+  }
+
+  /// Whether auth uses `MockAuthApi` instead of the real backend.
+  ///
+  /// Defaults to `true` in debug/profile and `false` in release, so a release
+  /// build with a missing `USE_MOCK_API` key can never ship the mock.
+  static bool get useMockApi => dotenv.get('USE_MOCK_API', fallback: kReleaseMode ? 'false' : 'true').toLowerCase() == 'true';
 
   static Duration get connectTimeout {
     final rawMs = int.tryParse(dotenv.get('CONNECT_TIMEOUT_MS', fallback: '15000'));
@@ -46,8 +56,7 @@ abstract final class Env {
   }) {
     final rawFlavor = dotenv.maybeGet('FLAVOR')?.trim().toLowerCase();
     if (rawFlavor != flavor.name) {
-      final message =
-          'Flavor mismatch detected: application is running with flavor "${flavor.name}", '
+      final message = 'Flavor mismatch detected: application is running with flavor "${flavor.name}", '
           'but loaded environment (${flavor.envFileName}) specifies FLAVOR="$rawFlavor".';
       if (isRelease) {
         throw StateError(message);

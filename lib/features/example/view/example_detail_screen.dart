@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_template/core/extensions/context_extension.dart';
 import 'package:flutter_template/core/theme/app_radius.dart';
 import 'package:flutter_template/core/theme/app_spacing.dart';
@@ -14,6 +13,7 @@ import 'package:flutter_template/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:flutter_template/shared/widgets/feedback/app_snackbar.dart';
 import 'package:flutter_template/shared/widgets/feedback/empty_view.dart';
 import 'package:flutter_template/shared/widgets/feedback/error_view.dart';
+import 'package:go_router/go_router.dart';
 
 /// Screen presenting the detailed information and actions for a single [ExampleItem].
 class ExampleDetailScreen extends ConsumerWidget {
@@ -77,9 +77,7 @@ class ExampleDetailScreen extends ConsumerWidget {
                       );
 
                       if (confirmed && context.mounted) {
-                        final success = await ref
-                            .read(exampleFormControllerProvider.notifier)
-                            .deleteItem(item.id);
+                        final success = await ref.read(exampleFormControllerProvider.notifier).deleteItem(item.id);
 
                         if (context.mounted && success) {
                           AppSnackbar.showSuccess(
@@ -157,8 +155,7 @@ class ExampleDetailScreen extends ConsumerWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        if (current.note != null &&
-                            current.note!.trim().isNotEmpty) ...[
+                        if (current.note != null && current.note!.trim().isNotEmpty) ...[
                           const SizedBox(height: AppSpacing.md),
                           const Divider(),
                           const SizedBox(height: AppSpacing.md),

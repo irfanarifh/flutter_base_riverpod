@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_template/core/theme/app_colors.dart';
 import 'package:flutter_template/core/theme/app_radius.dart';
 import 'package:flutter_template/core/theme/app_text_styles.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 abstract final class AppTheme {
   static ThemeData get lightTheme {
@@ -65,24 +64,22 @@ abstract final class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: AppRadius.roundedMd),
         clipBehavior: Clip.antiAlias,
       ),
-      textTheme: GoogleFonts.plusJakartaSansTextTheme(
-        TextTheme(
-          displayLarge: AppTextStyles.displayLarge.copyWith(color: colorScheme.onSurface),
-          displayMedium: AppTextStyles.displayMedium.copyWith(color: colorScheme.onSurface),
-          displaySmall: AppTextStyles.displaySmall.copyWith(color: colorScheme.onSurface),
-          headlineLarge: AppTextStyles.headlineLarge.copyWith(color: colorScheme.onSurface),
-          headlineMedium: AppTextStyles.headlineMedium.copyWith(color: colorScheme.onSurface),
-          headlineSmall: AppTextStyles.headlineSmall.copyWith(color: colorScheme.onSurface),
-          titleLarge: AppTextStyles.titleLarge.copyWith(color: colorScheme.onSurface),
-          titleMedium: AppTextStyles.titleMedium.copyWith(color: colorScheme.onSurface),
-          titleSmall: AppTextStyles.titleSmall.copyWith(color: colorScheme.onSurface),
-          bodyLarge: AppTextStyles.bodyLarge.copyWith(color: colorScheme.onSurface),
-          bodyMedium: AppTextStyles.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant),
-          bodySmall: AppTextStyles.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
-          labelLarge: AppTextStyles.labelLarge.copyWith(color: colorScheme.onSurface),
-          labelMedium: AppTextStyles.labelMedium.copyWith(color: colorScheme.onSurfaceVariant),
-          labelSmall: AppTextStyles.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
-        ),
+      textTheme: TextTheme(
+        displayLarge: AppTextStyles.displayLarge.copyWith(color: colorScheme.onSurface),
+        displayMedium: AppTextStyles.displayMedium.copyWith(color: colorScheme.onSurface),
+        displaySmall: AppTextStyles.displaySmall.copyWith(color: colorScheme.onSurface),
+        headlineLarge: AppTextStyles.headlineLarge.copyWith(color: colorScheme.onSurface),
+        headlineMedium: AppTextStyles.headlineMedium.copyWith(color: colorScheme.onSurface),
+        headlineSmall: AppTextStyles.headlineSmall.copyWith(color: colorScheme.onSurface),
+        titleLarge: AppTextStyles.titleLarge.copyWith(color: colorScheme.onSurface),
+        titleMedium: AppTextStyles.titleMedium.copyWith(color: colorScheme.onSurface),
+        titleSmall: AppTextStyles.titleSmall.copyWith(color: colorScheme.onSurface),
+        bodyLarge: AppTextStyles.bodyLarge.copyWith(color: colorScheme.onSurface),
+        bodyMedium: AppTextStyles.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant),
+        bodySmall: AppTextStyles.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
+        labelLarge: AppTextStyles.labelLarge.copyWith(color: colorScheme.onSurface),
+        labelMedium: AppTextStyles.labelMedium.copyWith(color: colorScheme.onSurfaceVariant),
+        labelSmall: AppTextStyles.labelSmall.copyWith(color: colorScheme.onSurfaceVariant),
       ),
     );
   }

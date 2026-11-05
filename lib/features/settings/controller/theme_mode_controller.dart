@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_template/features/settings/data/settings_repository_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme_mode_controller.g.dart';
 

@@ -1,6 +1,7 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/config/env.dart';
+import 'package:flutter_template/core/network/interceptors/api_response_interceptor.dart';
 import 'package:flutter_template/core/network/interceptors/auth_interceptor.dart';
 import 'package:flutter_template/core/network/interceptors/error_interceptor.dart';
 import 'package:flutter_template/core/network/interceptors/logging_interceptor.dart';
@@ -14,8 +15,7 @@ class SessionExpiredNotifier extends Notifier<int> {
   void increment() => state++;
 }
 
-final sessionExpiredProvider =
-    NotifierProvider<SessionExpiredNotifier, int>(SessionExpiredNotifier.new);
+final sessionExpiredProvider = NotifierProvider<SessionExpiredNotifier, int>(SessionExpiredNotifier.new);
 
 final dioProvider = Provider<Dio>((ref) {
   final options = BaseOptions(
@@ -38,6 +38,9 @@ final dioProvider = Provider<Dio>((ref) {
       storageService: storageService,
       ref: ref,
     ),
+    // Must come after AuthInterceptor (handles code -99) and before Logging so
+    // rejected envelopes are still logged through onError.
+    ApiResponseInterceptor(),
     LoggingInterceptor(loggerService),
     ErrorInterceptor(),
   ]);

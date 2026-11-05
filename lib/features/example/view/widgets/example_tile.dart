@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_template/core/extensions/context_extension.dart';
 import 'package:flutter_template/core/theme/app_radius.dart';
 import 'package:flutter_template/core/theme/app_spacing.dart';

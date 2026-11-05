@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' as drift;
+﻿import 'package:drift/drift.dart' as drift;
 import 'package:flutter_template/core/database/app_database.dart' as db;
 import 'package:flutter_template/features/example/model/example_item.dart';
 
@@ -23,9 +23,7 @@ abstract final class ExampleMapper {
     return db.ExampleItemsCompanion(
       id: drift.Value(item.id),
       title: drift.Value(item.title),
-      note: item.note == null && nullToAbsent
-          ? const drift.Value.absent()
-          : drift.Value(item.note),
+      note: item.note == null && nullToAbsent ? const drift.Value.absent() : drift.Value(item.note),
       createdAt: drift.Value(item.createdAt),
       updatedAt: drift.Value(item.updatedAt),
     );
@@ -89,8 +87,7 @@ extension DriftExampleItemExtension on db.ExampleItem {
 
 /// Convenience extensions for Domain model mapping.
 extension DomainExampleItemExtension on ExampleItem {
-  db.ExampleItemsCompanion toDriftCompanion({bool nullToAbsent = false}) =>
-      ExampleMapper.toDriftCompanion(this, nullToAbsent: nullToAbsent);
+  db.ExampleItemsCompanion toDriftCompanion({bool nullToAbsent = false}) => ExampleMapper.toDriftCompanion(this, nullToAbsent: nullToAbsent);
 
   ExampleItemDto toDto() => ExampleMapper.toDto(this);
 }

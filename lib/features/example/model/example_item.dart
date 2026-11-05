@@ -7,7 +7,7 @@ part 'example_item.g.dart';
 
 /// Immutable domain model representing an example item.
 @freezed
-class ExampleItem with _$ExampleItem {
+abstract class ExampleItem with _$ExampleItem {
   const factory ExampleItem({
     required int id,
     required String title,
@@ -22,7 +22,7 @@ class ExampleItem with _$ExampleItem {
 
 /// Data Transfer Object for remote API serialization.
 @freezed
-class ExampleItemDto with _$ExampleItemDto {
+abstract class ExampleItemDto with _$ExampleItemDto {
   const factory ExampleItemDto({
     required int id,
     required String title,

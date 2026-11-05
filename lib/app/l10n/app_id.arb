@@ -5,6 +5,7 @@
   "email": "Email",
   "password": "Kata Sandi",
   "logout": "Keluar",
+  "logoutConfirmMessage": "Apakah Anda yakin ingin keluar dari akun?",
   "home": "Beranda",
   "example": "Contoh",
   "settings": "Pengaturan",

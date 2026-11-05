@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/core/network/api_response.dart';
 
@@ -24,30 +24,25 @@ AppException mapDioException(DioException error) {
     case DioExceptionType.badResponse:
       final statusCode = error.response?.statusCode;
       final data = error.response?.data;
-      final responseCode =
-          data is Map<String, dynamic> ? data['code']?.toString() : null;
+      final responseCode = data is Map<String, dynamic> ? data['code']?.toString() : null;
 
-      if (statusCode == 401 ||
-          statusCode == 403 ||
-          responseCode == ApiResponse.unauthenticatedCode) {
-        final serverMessage = data is Map<String, dynamic>
-            ? (data['message'] as String?)
-            : null;
+      if (statusCode == 401 || statusCode == 403 || responseCode == ApiResponse.unauthenticatedCode) {
+        final serverMessage = data is Map<String, dynamic> ? (data['message'] as String?) : null;
         return UnauthorizedException(
           serverMessage ?? 'Session expired. Please log in again.',
           error.stackTrace,
         );
       }
 
-      final serverMessage = data is Map<String, dynamic>
-          ? (data['message'] as String?)
-          : null;
+      final serverMessage = data is Map<String, dynamic> ? (data['message'] as String?) : null;
 
       return ServerException(
         statusCode: statusCode,
         code: responseCode,
         message: serverMessage ??
-            'Server error occurred with status code $statusCode.',
+            (statusCode != null && statusCode >= 400
+                ? 'Server error occurred with status code $statusCode.'
+                : 'Request failed${responseCode != null ? ' (code $responseCode)' : ''}.'),
         stackTrace: error.stackTrace,
       );
     case DioExceptionType.cancel:

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/extensions/async_value_extension.dart';
 import 'package:flutter_template/core/extensions/context_extension.dart';
@@ -68,7 +68,9 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             controller: _passwordController,
             label: l10n.password,
             textInputAction: TextInputAction.done,
-            validator: AppValidators.password,
+            // Length rules belong to register / change-password flows; on login
+            // the server decides, so existing users are never blocked.
+            validator: (value) => AppValidators.required(value, 'Password is required'),
             onSubmitted: (_) => _submit(),
           ),
           const SizedBox(height: AppSpacing.xl),

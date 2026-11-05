@@ -5,7 +5,7 @@ part 'user.g.dart';
 
 /// Immutable user entity representing an authenticated session.
 @freezed
-class User with _$User {
+abstract class User with _$User {
   const factory User({
     required String id,
     required String email,

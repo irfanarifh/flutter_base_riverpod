@@ -1,6 +1,6 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_template/features/example/data/example_repository.dart';
+﻿import 'package:flutter_template/features/example/data/example_repository.dart';
 import 'package:flutter_template/features/example/model/example_item.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'example_list_controller.g.dart';
 

@@ -8,18 +8,20 @@ A production-ready, feature-first Flutter base template architected with strict 
 
 1. [Overview & Tech Stack](#1-overview--tech-stack)
 2. [Requirements](#2-requirements)
-3. [Quick Start](#3-quick-start)
-4. [Environment (.env) & Security Warning](#4-environment-env--security-warning)
-5. [Flavors & Build](#5-flavors--build)
-6. [Architecture & Code Conventions](#6-architecture--code-conventions)
-7. [Adding a New Feature](#7-adding-a-new-feature)
-8. [Removing Drift and the Example Feature](#8-removing-drift-and-the-example-feature)
-9. [Standard Conventions](#9-standard-conventions)
-10. [Testing](#10-testing)
-11. [Renaming the Template for a New Project](#11-renaming-the-template-for-a-new-project)
-12. [Launcher Icons & Native Splash Screen](#12-launcher-icons--native-splash-screen)
-13. [Replacing MockAuthApi with a Real API](#13-replacing-mockauthapi-with-a-real-api)
-14. [Template Readiness Checklist](#14-template-readiness-checklist)
+3. [Quick Start (Running the Template As-Is)](#3-quick-start-running-the-template-as-is)
+4. [Starting a New App from This Base](#4-starting-a-new-app-from-this-base)
+5. [Environment (.env) & Security Warning](#5-environment-env--security-warning)
+6. [Flavors & Build](#6-flavors--build)
+7. [Architecture & Code Conventions](#7-architecture--code-conventions)
+8. [Adding a New Feature](#8-adding-a-new-feature)
+9. [Removing Drift and the Example Feature](#9-removing-drift-and-the-example-feature)
+10. [Standard Conventions](#10-standard-conventions)
+11. [Testing](#11-testing)
+12. [Renaming the Template for a New Project](#12-renaming-the-template-for-a-new-project)
+13. [Launcher Icons & Native Splash Screen](#13-launcher-icons--native-splash-screen)
+14. [Replacing MockAuthApi with a Real API](#14-replacing-mockauthapi-with-a-real-api)
+15. [Template Readiness Checklist](#15-template-readiness-checklist)
+16. [NPM Scripts Reference](#16-npm-scripts-reference)
 
 ---
 
@@ -27,11 +29,11 @@ A production-ready, feature-first Flutter base template architected with strict 
 
 This template is designed to accelerate enterprise-scale project kickoffs without compromising performance, readability, or architectural integrity.
 
-- **State Management & DI**: [Riverpod 2.6+](https://riverpod.dev) (`flutter_riverpod`, `riverpod_annotation`, `riverpod_generator`) utilizing modern code-generation annotations (`Notifier`, `AsyncNotifier`, `StreamNotifier`).
-- **Routing**: [GoRouter 14.8+](https://pub.dev/packages/go_router) with `StatefulShellRoute.indexedStack`, `refreshListenable`, and automated session-based authentication redirects.
-- **Local Database**: [Drift 2.26+](https://drift.simonbinder.eu) (`drift`, `drift_flutter`, `drift_dev`) offline-first SQLite database that is completely modularized with zero coupling to global database accessors.
-- **Networking**: [Dio 5.8+](https://pub.dev/packages/dio) with structured interceptors: `AuthInterceptor` (Bearer token injection and automated 401 session expiry handling), `LoggingInterceptor` (sensitive header redaction), and `ErrorInterceptor`.
-- **Serialization & Immutability**: [Freezed 2.5+](https://pub.dev/packages/freezed) and `json_serializable`.
+- **State Management & DI**: [Riverpod 3.x](https://riverpod.dev) (`flutter_riverpod`, `riverpod_annotation`, `riverpod_generator`) utilizing modern code-generation annotations (`Notifier`, `AsyncNotifier`, `StreamNotifier`).
+- **Routing**: [GoRouter 18.x](https://pub.dev/packages/go_router) with `StatefulShellRoute.indexedStack`, `refreshListenable`, and automated session-based authentication redirects.
+- **Local Database**: [Drift 2.31+](https://drift.simonbinder.eu) (`drift`, `drift_flutter`, `drift_dev`) offline-first SQLite database that is completely modularized with zero coupling to global database accessors.
+- **Networking**: [Dio 5.11+](https://pub.dev/packages/dio) with structured interceptors: `AuthInterceptor` (Bearer token injection and automated 401 session expiry handling), `LoggingInterceptor` (sensitive header redaction), and `ErrorInterceptor`.
+- **Serialization & Immutability**: [Freezed 3.x](https://pub.dev/packages/freezed) and `json_serializable`.
 - **Storage**: `flutter_secure_storage` (JWT tokens & sensitive credentials) and `shared_preferences` (theme and language preferences).
 - **Environment**: `flutter_dotenv` for loading flavor-specific environment variables.
 - **Internationalization (i18n)**: Official Flutter `flutter_localizations` with ARB catalogs (`app_en.arb` and `app_id.arb`).
@@ -41,8 +43,8 @@ This template is designed to accelerate enterprise-scale project kickoffs withou
 
 ## 2. Requirements
 
-- **Flutter SDK**: `>= 3.24.0` (Latest stable channel recommended)
-- **Dart SDK**: `>= 3.5.0 < 4.0.0`
+- **Flutter SDK**: `>= 3.47.0` (Required by `google_fonts` 9.0.0; latest stable channel recommended)
+- **Dart SDK**: `>= 3.13.0 < 4.0.0` (Required by `google_fonts` 9.0.0)
 - **Android Studio / Xcode** with respective platform build toolchains installed.
 
 Verify your environment readiness by running:
@@ -53,9 +55,9 @@ flutter doctor
 
 ---
 
-## 3. Quick Start
+## 3. Quick Start (Running the Template As-Is)
 
-Follow these steps to run the application for the first time:
+Use these steps if you only want to run the base template locally to explore the code, inspect the architecture, or test the built-in demo feature:
 
 1. **Clone the repository:**
 
@@ -64,40 +66,121 @@ Follow these steps to run the application for the first time:
    cd my_project
    ```
 
-2. **Copy the environment templates:**
+2. **Check the environment files:**
 
-   ```bash
-   cp .env.example .env.dev
-   cp .env.example .env.staging
-   cp .env.example .env.prod
-   ```
+   `.env.dev`, `.env.staging`, and `.env.prod` are committed (see section 5), so a
+   fresh clone runs as-is. Edit `BASE_URL` and `APP_NAME` per flavor.
+   `.env.example` documents every supported key. Per-developer overrides go in
+   `.env.local` (git-ignored).
 
 3. **Install dependencies:**
 
    ```bash
-   flutter pub get
+   npm run get    # or: flutter pub get
    ```
 
 4. **Run code generation and localization:**
 
    ```bash
-   dart run tool/codegen.dart
+   npm run codegen    # or: dart run tool/codegen.dart
    ```
 
 5. **Launch the application (Dev Flavor):**
    ```bash
-   flutter run
+   npm run dev    # or: flutter run
    ```
 
 ---
 
-## 4. Environment (.env) & Security Warning
+## 4. Starting a New App from This Base
+
+When cloning this repository to build a **brand-new application**, follow this sequential checklist:
+
+### Step 1: Clone and Re-initialize Git Remote
+Clone the base repository and redirect `origin` to your own remote repository:
+
+```bash
+git clone <template-repository-url> my_new_app
+cd my_new_app
+
+# Point origin to your newly created repository
+git remote set-url origin <your-new-repository-url>
+```
+
+### Step 2: Rename Identifiers & Package Name
+Run the automated renaming utility to rebrand the package name, bundle identifiers (Android & iOS), application display name, and `package.json`:
+
+```bash
+# Using npm
+npm run rename my_new_app com.company.mynewapp "My New App"
+
+# Or using Dart directly
+dart run tool/rename_project.dart my_new_app com.company.mynewapp "My New App"
+```
+
+### Step 3: Configure Environment Variables
+Update the `.env.*` configuration files with your project's backend details:
+1. Edit `BASE_URL` in `.env.dev`, `.env.staging`, and `.env.prod`.
+2. When ready to connect to your live backend API, toggle `USE_MOCK_API=false` in `.env.dev` (already defaults to `false` in release mode).
+3. If developers need local overrides without committing, place them in `.env.local` (automatically git-ignored).
+
+### Step 4: Customize Branding (Icons & Splash Screen)
+1. **App Icons**:
+   - Replace `assets/icons/app_icon.png` (1024x1024 master icon).
+   - Replace `assets/icons/app_icon_foreground.png` (Android adaptive icon foreground).
+   - Generate native icons:
+     ```bash
+     npm run icons   # or: dart run flutter_launcher_icons
+     ```
+2. **Splash Screens**:
+   - Replace `assets/images/splash.png` (light mode) and `assets/images/splash_dark.png` (dark mode).
+   - Generate native splash screens:
+     ```bash
+     npm run splash   # or: dart run flutter_native_splash:create
+     ```
+
+### Step 5: Clean, Regenerate Code & Verify
+Synchronize dependencies, generate required boilerplate (`build_runner` and `l10n`), and verify that all test suites pass:
+
+```bash
+npm run fresh   # executes: flutter clean && flutter pub get && dart run tool/codegen.dart
+npm test        # verify that all unit and widget tests pass (100% pass rate)
+```
+
+### Step 6: Clean Up Example Code & Start Developing
+1. **(Optional) Remove Example Feature**:
+   If your app does not need the CRUD sample or Drift SQLite database, follow [Section 9 (Removing Drift and the Example Feature)](#9-removing-drift-and-the-example-feature) to remove `lib/features/example/`.
+2. **Scaffold Your First Feature**:
+   Create a new feature module using the scaffolding generator:
+   ```bash
+   npm run feature my_feature_name
+   ```
+3. **Launch the App**:
+   ```bash
+   npm run dev    # or: flutter run --flavor dev
+   ```
+
+---
+
+## 5. Environment (.env) & Security Warning
 
 Environment files are loaded during application bootstrapping through [Env](file:///lib/core/config/env.dart):
 
 - `.env.dev` loaded by default or with `--flavor dev`
 - `.env.staging` loaded with `--flavor staging`
 - `.env.prod` loaded with `--flavor prod`
+
+Each file is registered as a **per-flavor asset** in `pubspec.yaml`, so a build only
+bundles its own `.env` (the prod APK does not contain `.env.dev`).
+
+| Key | Purpose |
+|---|---|
+| `FLAVOR` | Must match the flavor passed to `bootstrap`; a mismatch throws in release |
+| `APP_NAME` | Display name used in the UI |
+| `BASE_URL` | API base URL (required) |
+| `ENABLE_LOGGING` | `true` enables logs (passwords and tokens are redacted) |
+| `CONNECT_TIMEOUT_MS` | Dio connect/send/receive timeout |
+| `USE_MOCK_API` | `true` = `MockAuthApi`, `false` = real backend. Defaults to `true` in debug and `false` in release |
 
 > [!WARNING]
 > **CRITICAL SECURITY WARNING:**
@@ -107,13 +190,28 @@ Environment files are loaded during application bootstrapping through [Env](file
 
 ---
 
-## 5. Flavors & Build
+## 6. Flavors & Build
 
 The application has 3 distinct build flavors configured on both Android and iOS: `dev`, `staging`, and `prod`.
 
 Under the unified entrypoint [`lib/main.dart`](file:///lib/main.dart), Flutter's built-in `appFlavor` constant is populated automatically from the `--flavor` CLI flag. Furthermore, `default-flavor: dev` declared in `pubspec.yaml` enables plain `flutter run` without arguments to default directly to the `dev` flavor.
 
 ### Running the Application
+
+Using **npm scripts** (recommended):
+
+```bash
+# Development (dev flavor)
+npm run dev
+
+# Staging
+npm run staging
+
+# Production
+npm run prod
+```
+
+Or using native Flutter CLI:
 
 ```bash
 # Development (default flavor via pubspec default-flavor: dev)
@@ -126,7 +224,25 @@ flutter run --flavor staging
 flutter run --flavor prod
 ```
 
-### Building Release Binaries (Android APK / App Bundle)
+### Building Release Binaries (Android APK / App Bundle / iOS)
+
+Using **npm scripts**:
+
+```bash
+# APK
+npm run build           # default: flavor prod
+npm run build:dev
+npm run build:staging
+npm run build:prod
+
+# Android App Bundle (AAB for Google Play)
+npm run build:aab
+
+# iOS
+npm run build:ipa
+```
+
+Or using native Flutter CLI:
 
 ```bash
 # APK
@@ -136,6 +252,9 @@ flutter build apk --flavor prod
 
 # Android App Bundle (AAB for Google Play)
 flutter build appbundle --flavor prod
+
+# iOS
+flutter build ipa --flavor prod
 ```
 
 > [!WARNING]
@@ -152,6 +271,13 @@ flutter build appbundle --flavor prod
 
 ### iOS Scheme Verification Checklist
 
+> [!IMPORTANT]
+> The repository ships `ios/Flutter/{Dev,Staging,Prod}.xcconfig`, but the Xcode
+> project still has only the default `Runner` scheme and the `Debug`/`Release`/`Profile`
+> configurations. Until the schemes and `Debug-<flavor>` / `Release-<flavor>` /
+> `Profile-<flavor>` configurations below are created, `flutter run --flavor dev`
+> works on **Android only**.
+
 Flutter identifies iOS flavor configurations through corresponding schemes and build configurations:
 
 1. Open `ios/Runner.xcworkspace` in Xcode.
@@ -162,7 +288,7 @@ Flutter identifies iOS flavor configurations through corresponding schemes and b
 
 ---
 
-## 6. Architecture & Code Conventions
+## 7. Architecture & Code Conventions
 
 This project adheres strictly to a **Feature-First** architecture with clear layer segregation:
 
@@ -206,7 +332,7 @@ lib/
 
 ---
 
-## 7. Adding a New Feature
+## 8. Adding a New Feature
 
 ### Using the Automated Tooling Script
 
@@ -245,7 +371,7 @@ This generates:
 
 ---
 
-## 8. Removing Drift and the Example Feature
+## 9. Removing Drift and the Example Feature
 
 The example feature is completely modular and self-contained. If your project does not require local SQLite persistence (Drift) or the example CRUD sample, follow these clean removal steps:
 
@@ -272,7 +398,7 @@ The example feature is completely modular and self-contained. If your project do
 
 ---
 
-## 9. Standard Conventions
+## 10. Standard Conventions
 
 ### Naming Conventions
 
@@ -311,7 +437,7 @@ Supported types:
 
 ---
 
-## 10. Testing
+## 11. Testing
 
 The project is equipped with a complete testing suite operating with zero real network or disk access:
 
@@ -360,7 +486,7 @@ testWidgets('renders screen with mock repository', (tester) async {
 
 ---
 
-## 11. Renaming the Template for a New Project
+## 12. Renaming the Template for a New Project
 
 To rename the project from `flutter_template` to your desired application identifier, run the provided utility script:
 
@@ -381,10 +507,17 @@ The script automatically updates:
 - Android `applicationId` and `app_name` in `android/app/build.gradle.kts`
 - iOS `PRODUCT_BUNDLE_IDENTIFIER` and `APP_DISPLAY_NAME` in project configs
 - `APP_NAME` values across all `.env.*` files
+- `name` and `description` in `package.json`
 
 After running the script, re-synchronize the project:
 
 ```bash
+# Via npm
+npm run get
+npm run codegen
+npm test
+
+# Or via standard Flutter/Dart commands
 flutter pub get
 dart run tool/codegen.dart
 flutter test
@@ -392,7 +525,7 @@ flutter test
 
 ---
 
-## 12. Launcher Icons & Native Splash Screen
+## 13. Launcher Icons & Native Splash Screen
 
 This template includes automated generation for multi-platform application launcher icons and native splash screens on Android and iOS.
 
@@ -428,43 +561,131 @@ Native splash screen generation is configured via [`flutter_native_splash.yaml`]
    dart run flutter_native_splash:create --path=flutter_native_splash-dev.yaml
    ```
 3. **Framework Lifecycle Wiring**:
-   In [`lib/bootstrap.dart`](file:///lib/bootstrap.dart), `FlutterNativeSplash.preserve(...)` holds the splash screen during asynchronous bootstrap initialization (`.env`, `SharedPreferences`), and `FlutterNativeSplash.remove()` releases it immediately after `runApp()`.
+   In [`lib/bootstrap.dart`](file:///lib/bootstrap.dart), `FlutterNativeSplash.preserve(...)` holds the splash screen during asynchronous initialization (`.env`, `SharedPreferences`). It is released through `SplashGuard.remove()` (called once) by [`App`](file:///lib/app/app.dart) as soon as the stored session has been restored, so the user never sees an empty frame before the router redirect. `bootstrap` also calls it after 8 seconds and when initialization fails (a minimal error screen is shown instead).
 
 ---
 
-## 13. Replacing MockAuthApi with a Real API
+## 14. Replacing MockAuthApi with a Real API
 
-By default, authentication is backed by `MockAuthApi`, which validates email formats and password lengths locally without requiring network connectivity.
+By default (debug), authentication is backed by `MockAuthApi`, which validates email format and a 6+ character password locally without any network access.
 
-To connect to your live backend service:
+To use your live backend:
 
-1. Open [auth_repository_provider.dart](file:///lib/features/auth/data/auth_repository_provider.dart).
-2. Switch the `authApi` instantiation from `MockAuthApi()` to `RealAuthApi`:
+1. Set `USE_MOCK_API=false` in the flavor's `.env` file (it is already `false` by default in release builds).
+2. Update the endpoint routes in [auth_api.dart](file:///lib/features/auth/data/auth_api.dart) (`/auth/login`, `/auth/me`) to match your backend.
 
-   ```dart
-   // Change from:
-   final AuthApi authApi = MockAuthApi();
+### API response envelope
 
-   // To:
-   final AuthApi authApi = RealAuthApi(ref.watch(dioProvider));
-   ```
+The template assumes every backend response looks like this:
 
-3. Update endpoint routes in [auth_api.dart](file:///lib/features/auth/data/auth_api.dart) (`/auth/login`, `/auth/me`) to match your backend specification.
+```json
+{ "code": "1", "message": "Success", "data": { } }
+```
+
+| `code` | Meaning | Handling |
+|---|---|---|
+| `1` | Success | `data` is returned |
+| `-99` | Unauthenticated | `AuthInterceptor` clears the token and triggers logout |
+| anything else | Failure | `ApiResponseInterceptor` rejects it as `ServerException(code, message)` |
+
+HTTP 200 with a failing `code` is therefore an error, not a success. In API classes read the payload with the `unwrap` helper instead of touching `response.data` directly:
+
+```dart
+final response = await _dio.get<Map<String, dynamic>>('/items');
+return response.unwrap(
+  (json) => (json! as List).map((e) => Item.fromJson(e as Map<String, dynamic>)).toList(),
+);
+```
+
+Use `response.ensureSuccess()` for calls without a `data` payload. If your backend uses other codes, change the constants in [api_response.dart](file:///lib/core/network/api_response.dart) in one place.
+
+### Session behavior
+
+- On startup the stored token is verified with `/auth/me`.
+- If the server rejects the token, the session is cleared.
+- If the request fails for any other reason (offline, timeout, server down), the token is **kept** and the last cached user is used, so the app stays usable offline.
+- If fetching the profile fails right after login, the freshly saved token is removed again.
 
 ---
 
-## 14. Template Readiness Checklist
+## 15. Template Readiness Checklist
 
 Before publishing or onboarding your engineering team onto this template, ensure all the following verification checkpoints are met:
 
-- [x] **Flavors**: `dev`, `staging`, and `prod` targets configured for Android and iOS.
-- [x] **Network Security**: Dio interceptors automatically redact `Authorization` headers in logs and trigger session invalidation on HTTP 401.
+- [x] **Flavors (Android)**: `dev`, `staging`, and `prod` product flavors configured.
+- [ ] **Flavors (iOS)**: create the schemes and build configurations in Xcode (see section 6).
+- [x] **Network Security**: Dio logs redact `Authorization` headers and sensitive JSON fields (`password`, `token`, ...); HTTP 401 and code `-99` trigger session invalidation.
 - [x] **Secure Storage**: JWT access and refresh tokens persisted using `FlutterSecureStorage`.
 - [x] **Offline Database**: Drift SQLite DAO is completely decoupled and tested with `NativeDatabase.memory()`.
 - [x] **Routing**: GoRouter handles reactive auth redirects and bottom navigation state retention via `StatefulShellRoute`.
 - [x] **Localization**: UI text is localized with ARB catalogs (`en` and `id`) via `context.l10n`.
 - [x] **Theme System**: Material 3 with persistent system, light, and dark mode toggles.
 - [x] **Branding**: Launcher icons and native splash screens configured and generated for Android and iOS.
-- [x] **Testing**: 100% deterministic unit, widget, and integration tests passing.
-- [x] **Static Analysis**: `flutter analyze` produces **0 warnings** and **0 errors**.
+- [x] **Testing**: run `flutter test` and confirm everything passes.
+- [x] **Static Analysis**: run `flutter analyze` and confirm 0 warnings and 0 errors.
 - [x] **Automated Tooling**: `tool/codegen.dart`, `tool/new_feature.dart`, and `tool/rename_project.dart` cross-platform scripts tested and operational.
+
+---
+
+## 16. NPM Scripts Reference
+
+For convenience, [`package.json`](file:///package.json) provides unified shortcut scripts for common Flutter and Dart workflows.
+
+Run `npm run` without arguments in your terminal to see the full list of available scripts.
+
+### Application Execution
+
+| Script | Command | Description |
+|---|---|---|
+| `npm run dev` | `flutter run --flavor dev` | Runs the application in development flavor (debug mode with Hot Reload) |
+| `npm run staging` | `flutter run --flavor staging` | Runs the application in staging flavor |
+| `npm run prod` | `flutter run --flavor prod` | Runs the application in production flavor |
+| `npm start` | `flutter run` | Runs the application with default flavor (`dev`) |
+
+### Production & Release Builds
+
+| Script | Command | Description |
+|---|---|---|
+| `npm run build` | `flutter build apk --flavor prod` | Builds production release APK |
+| `npm run build:dev` | `flutter build apk --flavor dev` | Builds development release APK |
+| `npm run build:staging` | `flutter build apk --flavor staging` | Builds staging release APK |
+| `npm run build:prod` | `flutter build apk --flavor prod` | Builds production release APK |
+| `npm run build:aab` | `flutter build appbundle --flavor prod` | Builds production Android App Bundle (AAB for Google Play) |
+| `npm run build:ipa` | `flutter build ipa --flavor prod` | Builds production iOS archive (.ipa) |
+| `npm run build:ios` | `flutter build ios --flavor prod` | Builds production iOS bundle |
+
+### Code Generation & Assets
+
+| Script | Command | Description |
+|---|---|---|
+| `npm run codegen` | `dart run tool/codegen.dart` | Executes full generation pipeline: `pub get` → `build_runner` → `l10n` |
+| `npm run build-runner` | `dart run build_runner build` | Runs `build_runner` for Freezed, Riverpod, Drift, and JSON |
+| `npm run watch` | `dart run build_runner watch` | Watches files and re-runs code generation on change |
+| `npm run l10n` | `flutter gen-l10n` | Generates localization delegates from `.arb` files |
+| `npm run icons` | `dart run flutter_launcher_icons` | Generates Android adaptive and iOS application launcher icons |
+| `npm run splash` | `dart run flutter_native_splash:create` | Generates Android and iOS native splash screens |
+
+### Code Quality & Testing
+
+| Script | Command | Description |
+|---|---|---|
+| `npm test` | `flutter test` | Executes all unit and widget tests |
+| `npm run test:coverage` | `flutter test --coverage` | Executes tests and generates code coverage report (`coverage/lcov.info`) |
+| `npm run test:integration` | `flutter test integration_test/app_test.dart` | Runs end-to-end integration test suite |
+| `npm run lint` | `flutter analyze` | Runs static analysis and linter checks across the codebase |
+| `npm run analyze` | `flutter analyze` | Alias for `lint` |
+| `npm run format` | `dart format .` | Formats all Dart source files according to style guidelines |
+| `npm run format:fix` | `dart format --fix .` | Formats files and applies automated fixable lint suggestions |
+| `npm run check` | `npm run format && npm run analyze && npm test` | Complete pre-commit pipeline: formats, lints, and tests |
+
+### Project Hygiene & Scaffolding
+
+| Script | Command | Description |
+|---|---|---|
+| `npm run get` | `flutter pub get` | Downloads and updates project dependencies |
+| `npm run clean` | `flutter clean` | Deletes build outputs and cached compiler artifacts |
+| `npm run clean:get` | `flutter clean && flutter pub get` | Cleans build cache and re-downloads dependencies |
+| `npm run fresh` | `flutter clean && flutter pub get && dart run tool/codegen.dart` | Complete project reset and full code regeneration |
+| `npm run feature <name>` | `dart run tool/new_feature.dart <name>` | Scaffolds standard feature module structure (`data`, `model`, `controller`, `view`) |
+| `npm run rename <pkg> <id> "<Name>"` | `dart run tool/rename_project.dart ...` | Renames project identifiers across Android, iOS, `.env`, Dart imports, and `package.json` |
+

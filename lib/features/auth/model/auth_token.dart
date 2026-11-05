@@ -5,7 +5,7 @@ part 'auth_token.g.dart';
 
 /// Authorization tokens returned by the authentication server.
 @freezed
-class AuthToken with _$AuthToken {
+abstract class AuthToken with _$AuthToken {
   const factory AuthToken({
     required String accessToken,
     String? refreshToken,

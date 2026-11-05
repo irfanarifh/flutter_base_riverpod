@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/core/network/api_response.dart';
@@ -38,8 +38,7 @@ class AuthInterceptor extends Interceptor {
         await storageService.deleteToken();
         ref.read(sessionExpiredProvider.notifier).increment();
 
-        final message = (data['message'] as String?) ??
-            'Session expired. Please log in again.';
+        final message = (data['message'] as String?) ?? 'Session expired. Please log in again.';
         handler.reject(
           DioException(
             requestOptions: response.requestOptions,
@@ -61,9 +60,7 @@ class AuthInterceptor extends Interceptor {
     ErrorInterceptorHandler handler,
   ) async {
     final data = err.response?.data;
-    final isUnauthenticatedPayload =
-        data is Map<String, dynamic> &&
-        data['code']?.toString() == ApiResponse.unauthenticatedCode;
+    final isUnauthenticatedPayload = data is Map<String, dynamic> && data['code']?.toString() == ApiResponse.unauthenticatedCode;
 
     if (err.response?.statusCode == 401 || isUnauthenticatedPayload) {
       await storageService.deleteToken();

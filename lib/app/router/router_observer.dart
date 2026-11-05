@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+﻿import 'package:flutter/widgets.dart';
 import 'package:flutter_template/core/services/logger_service.dart';
 
 /// Navigation observer that logs route transitions using [LoggerService].

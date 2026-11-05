@@ -1,5 +1,5 @@
+﻿import 'package:flutter_template/core/network/api_response.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_template/core/network/api_response.dart';
 
 void main() {
   group('ApiResponse', () {

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/core/theme/app_spacing.dart';
 import 'package:flutter_template/shared/widgets/buttons/primary_button.dart';
@@ -25,9 +25,7 @@ class ErrorView extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    final resolvedMessage = message ??
-        exception?.message ??
-        'An unexpected error occurred. Please try again.';
+    final resolvedMessage = message ?? exception?.message ?? 'An unexpected error occurred. Please try again.';
 
     final errorIcon = icon ??
         Icon(

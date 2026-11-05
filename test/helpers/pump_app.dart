@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_template/app/l10n/app_localizations.dart';
 import 'package:flutter_template/core/theme/app_theme.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 /// Extension on [WidgetTester] providing standard environment bootstrapping
 /// with Riverpod [ProviderScope], Material 3 [AppTheme], and localized strings.
@@ -17,8 +18,8 @@ extension PumpApp on WidgetTester {
     Locale locale = const Locale('en'),
   }) async {
     if (!dotenv.isInitialized) {
-      dotenv.testLoad(
-        fileInput: 'FLAVOR=dev\nAPP_NAME=Flutter Template\nBASE_URL=https://api.example.com\nENABLE_LOGGING=false\nCONNECT_TIMEOUT_MS=15000\n',
+      dotenv.loadFromString(
+        envString: 'FLAVOR=dev\nAPP_NAME=Flutter Template\nBASE_URL=https://api.example.com\nENABLE_LOGGING=false\nCONNECT_TIMEOUT_MS=15000\n',
       );
     }
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_template/core/theme/app_spacing.dart';
 
 /// Clean empty state placeholder with optional descriptive text and action button.

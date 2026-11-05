@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:flutter_template/app/app.dart';
 import 'package:flutter_template/core/database/app_database_provider.dart';
 import 'package:flutter_template/features/auth/data/auth_repository_provider.dart';
 import 'package:flutter_template/shared/providers/shared_prefs_provider.dart';
 import 'package:flutter_template/shared/widgets/buttons/primary_button.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,9 +23,8 @@ void main() {
   setUp(() async {
     // Explicit bootstrap-independent setup using Flavor.dev (appFlavor is null in tests)
     if (!dotenv.isInitialized) {
-      dotenv.testLoad(
-        fileInput:
-            'FLAVOR=dev\nAPP_NAME=Flutter Template (Dev)\nBASE_URL=https://api.dev.example.com\nENABLE_LOGGING=true\nCONNECT_TIMEOUT_MS=15000\n',
+      dotenv.loadFromString(
+        envString: 'FLAVOR=dev\nAPP_NAME=Flutter Template (Dev)\nBASE_URL=https://api.dev.example.com\nENABLE_LOGGING=true\nCONNECT_TIMEOUT_MS=15000\n',
       );
     }
 
@@ -33,10 +32,8 @@ void main() {
     sharedPreferences = await SharedPreferences.getInstance();
     mockAuthRepository = MockAuthRepository();
 
-    when(() => mockAuthRepository.restoreSession())
-        .thenAnswer((_) async => null);
-    when(() => mockAuthRepository.login('test@example.com', 'password123'))
-        .thenAnswer((_) async => TestFixtures.testUser);
+    when(() => mockAuthRepository.restoreSession()).thenAnswer((_) async => null);
+    when(() => mockAuthRepository.login('test@example.com', 'password123')).thenAnswer((_) async => TestFixtures.testUser);
   });
 
   testWidgets('full flow: login, create item, navigate to settings, toggle theme', (tester) async {

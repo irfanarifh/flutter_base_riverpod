@@ -1,7 +1,7 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_template/core/network/dio_provider.dart';
 import 'package:flutter_template/features/auth/data/auth_repository_provider.dart';
 import 'package:flutter_template/features/auth/model/user.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_controller.g.dart';
 
@@ -23,9 +23,11 @@ class AuthController extends _$AuthController {
   /// Performs user sign-in and updates authentication state.
   Future<void> login(String email, String password) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       return ref.read(authRepositoryProvider).login(email, password);
     });
+    if (!ref.mounted) return;
+    state = result;
     if (state.hasError) {
       Error.throwWithStackTrace(state.error!, state.stackTrace!);
     }
@@ -34,9 +36,11 @@ class AuthController extends _$AuthController {
   /// Clears user credentials and resets authentication state to null.
   Future<void> logout() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       await ref.read(authRepositoryProvider).logout();
       return null;
     });
+    if (!ref.mounted) return;
+    state = result;
   }
 }

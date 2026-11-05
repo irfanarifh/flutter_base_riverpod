@@ -9,7 +9,7 @@ Future<void> main() async {
   await _runCommand('flutter', ['pub', 'get']);
 
   print('\n==> [2/3] Running build_runner code generation...');
-  await _runCommand('dart', ['run', 'build_runner', 'build', '-d']);
+  await _runCommand('dart', ['run', 'build_runner', 'build']);
 
   print('\n==> [3/3] Generating application localizations...');
   await _runCommand('flutter', ['gen-l10n']);

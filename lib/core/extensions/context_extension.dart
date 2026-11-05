@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 // Note: Importing AppLocalizations from app/l10n is the single allowed exception
 // to the core layer import boundary rule to enable context.l10n across the app.
 import 'package:flutter_template/app/l10n/app_localizations.dart';

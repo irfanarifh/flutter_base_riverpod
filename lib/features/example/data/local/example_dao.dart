@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart' as drift;
+﻿import 'package:drift/drift.dart' as drift;
 import 'package:flutter_template/core/database/app_database.dart' as db;
 
 /// Data Access Object for local SQLite operations on the [db.ExampleItems] table.
@@ -31,8 +31,7 @@ class ExampleDao {
 
   /// Fetches a single item by its unique [id], or returns `null` if not found.
   Future<db.ExampleItem?> getById(int id) {
-    return (_db.select(_db.exampleItems)..where((tbl) => tbl.id.equals(id)))
-        .getSingleOrNull();
+    return (_db.select(_db.exampleItems)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
   }
 
   /// Inserts a new row into the table and returns the generated autoincrement ID.
@@ -47,7 +46,6 @@ class ExampleDao {
 
   /// Deletes a row matching the provided [id] and returns the count of deleted rows.
   Future<int> delete(int id) {
-    return (_db.delete(_db.exampleItems)..where((tbl) => tbl.id.equals(id)))
-        .go();
+    return (_db.delete(_db.exampleItems)..where((tbl) => tbl.id.equals(id))).go();
   }
 }

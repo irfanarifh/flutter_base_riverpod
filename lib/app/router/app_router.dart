@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_template/app/router/app_routes.dart';
 import 'package:flutter_template/app/router/router_observer.dart';
 import 'package:flutter_template/app/router/shell/main_shell.dart';
@@ -11,6 +8,8 @@ import 'package:flutter_template/features/auth/view/login_screen.dart';
 import 'package:flutter_template/features/example/view/example_detail_screen.dart';
 import 'package:flutter_template/features/example/view/example_list_screen.dart';
 import 'package:flutter_template/features/settings/view/settings_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
 
@@ -18,7 +17,7 @@ part 'app_router.g.dart';
 GoRouter appRouter(Ref ref) {
   final refreshNotifier = ValueNotifier<bool>(false);
 
-  ref.listen(authControllerProvider, (_, __) {
+  ref.listen(authControllerProvider, (_, _) {
     refreshNotifier.value = !refreshNotifier.value;
   });
   ref.onDispose(refreshNotifier.dispose);
@@ -38,7 +37,7 @@ GoRouter appRouter(Ref ref) {
         return null;
       }
 
-      final isLoggedIn = authState.valueOrNull != null;
+      final isLoggedIn = authState.value != null;
       final isLoggingIn = state.matchedLocation == AppRoutes.loginPath;
 
       if (!isLoggedIn) {
@@ -58,8 +57,7 @@ GoRouter appRouter(Ref ref) {
         builder: (context, state) => const LoginScreen(),
       ),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            MainShell(navigationShell: navigationShell),
+        builder: (context, state, navigationShell) => MainShell(navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
             routes: [
@@ -85,9 +83,7 @@ GoRouter appRouter(Ref ref) {
               GoRoute(
                 path: AppRoutes.settingsPath,
                 name: AppRoutes.settingsName,
-                builder: (context, state) => SettingsScreen(
-                  onLogout: () => ref.read(authControllerProvider.notifier).logout(),
-                ),
+                builder: (context, state) => const SettingsScreen(),
               ),
             ],
           ),

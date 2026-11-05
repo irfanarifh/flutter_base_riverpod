@@ -1,7 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_template/core/database/app_database.dart';
+﻿import 'package:flutter_template/core/database/app_database.dart';
 import 'package:flutter_template/features/example/data/local/example_dao.dart';
 import 'package:flutter_template/features/example/model/example_mapper.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 import '../../../helpers/test_database.dart';
 

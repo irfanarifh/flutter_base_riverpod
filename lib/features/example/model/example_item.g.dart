@@ -6,16 +6,15 @@ part of 'example_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ExampleItemImpl _$$ExampleItemImplFromJson(Map<String, dynamic> json) =>
-    _$ExampleItemImpl(
-      id: (json['id'] as num).toInt(),
-      title: json['title'] as String,
-      note: json['note'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-    );
+_ExampleItem _$ExampleItemFromJson(Map<String, dynamic> json) => _ExampleItem(
+  id: (json['id'] as num).toInt(),
+  title: json['title'] as String,
+  note: json['note'] as String?,
+  createdAt: DateTime.parse(json['createdAt'] as String),
+  updatedAt: DateTime.parse(json['updatedAt'] as String),
+);
 
-Map<String, dynamic> _$$ExampleItemImplToJson(_$ExampleItemImpl instance) =>
+Map<String, dynamic> _$ExampleItemToJson(_ExampleItem instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
@@ -24,8 +23,8 @@ Map<String, dynamic> _$$ExampleItemImplToJson(_$ExampleItemImpl instance) =>
       'updatedAt': instance.updatedAt.toIso8601String(),
     };
 
-_$ExampleItemDtoImpl _$$ExampleItemDtoImplFromJson(Map<String, dynamic> json) =>
-    _$ExampleItemDtoImpl(
+_ExampleItemDto _$ExampleItemDtoFromJson(Map<String, dynamic> json) =>
+    _ExampleItemDto(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
       note: json['note'] as String?,
@@ -33,8 +32,7 @@ _$ExampleItemDtoImpl _$$ExampleItemDtoImplFromJson(Map<String, dynamic> json) =>
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
 
-Map<String, dynamic> _$$ExampleItemDtoImplToJson(
-        _$ExampleItemDtoImpl instance) =>
+Map<String, dynamic> _$ExampleItemDtoToJson(_ExampleItemDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,

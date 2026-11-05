@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:flutter_template/core/errors/error_mapper.dart';
 
 class ErrorInterceptor extends Interceptor {

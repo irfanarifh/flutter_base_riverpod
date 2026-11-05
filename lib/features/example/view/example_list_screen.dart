@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_template/app/router/app_routes.dart';
 import 'package:flutter_template/core/extensions/context_extension.dart';
 import 'package:flutter_template/core/theme/app_radius.dart';
@@ -16,6 +15,7 @@ import 'package:flutter_template/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:flutter_template/shared/widgets/feedback/app_snackbar.dart';
 import 'package:flutter_template/shared/widgets/feedback/empty_view.dart';
 import 'package:flutter_template/shared/widgets/inputs/search_field.dart';
+import 'package:go_router/go_router.dart';
 
 /// Screen displaying the searchable, observable list of example items.
 class ExampleListScreen extends ConsumerWidget {
@@ -43,9 +43,7 @@ class ExampleListScreen extends ConsumerWidget {
             child: SearchField(
               hintText: l10n.search,
               onSearch: (query) {
-                ref
-                    .read(exampleListControllerProvider.notifier)
-                    .setSearch(query);
+                ref.read(exampleListControllerProvider.notifier).setSearch(query);
               },
             ),
           ),
@@ -108,9 +106,7 @@ class ExampleListScreen extends ConsumerWidget {
                           );
                         },
                         onDismissed: (direction) async {
-                          final success = await ref
-                              .read(exampleFormControllerProvider.notifier)
-                              .deleteItem(item.id);
+                          final success = await ref.read(exampleFormControllerProvider.notifier).deleteItem(item.id);
 
                           if (context.mounted && success) {
                             AppSnackbar.showSuccess(
@@ -141,9 +137,7 @@ class ExampleListScreen extends ConsumerWidget {
                             );
 
                             if (confirmed && context.mounted) {
-                              final success = await ref
-                                  .read(exampleFormControllerProvider.notifier)
-                                  .deleteItem(item.id);
+                              final success = await ref.read(exampleFormControllerProvider.notifier).deleteItem(item.id);
 
                               if (context.mounted && success) {
                                 AppSnackbar.showSuccess(

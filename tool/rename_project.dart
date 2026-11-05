@@ -46,11 +46,11 @@ void main(List<String> args) {
   }
 
   // 1. Update pubspec.yaml
-  print('\n==> [1/5] Updating pubspec.yaml...');
+  print('\n==> [1/6] Updating pubspec.yaml...');
   _replaceInFile('pubspec.yaml', 'name: $oldPkg', 'name: $newPkg');
 
   // 2. Update imports across lib/, test/, and integration_test/
-  print('==> [2/5] Updating Dart imports across lib/, test/, and integration_test/...');
+  print('==> [2/6] Updating Dart imports across lib/, test/, and integration_test/...');
   for (final dirPath in ['lib', 'test', 'integration_test']) {
     final dir = Directory(dirPath);
     if (!dir.existsSync()) continue;
@@ -62,7 +62,7 @@ void main(List<String> args) {
   }
 
   // 3. Update Android configuration
-  print('==> [3/5] Updating Android configuration...');
+  print('==> [3/6] Updating Android configuration...');
   const androidGradle = 'android/app/build.gradle.kts';
   if (File(androidGradle).existsSync()) {
     _replaceInFile(androidGradle, 'applicationId = "$oldBundleId"', 'applicationId = "$newBundleId"');
@@ -72,7 +72,7 @@ void main(List<String> args) {
   }
 
   // 4. Update iOS configuration
-  print('==> [4/5] Updating iOS configuration...');
+  print('==> [4/6] Updating iOS configuration...');
   final iosDir = Directory('ios');
   if (iosDir.existsSync()) {
     for (final entity in iosDir.listSync(recursive: true)) {
@@ -89,7 +89,7 @@ void main(List<String> args) {
   }
 
   // 5. Update .env files
-  print('==> [5/5] Updating .env files...');
+  print('==> [5/6] Updating .env files...');
   for (final envName in ['.env.dev', '.env.staging', '.env.prod', '.env.example', '.env.prod.example']) {
     final envFile = File(envName);
     if (envFile.existsSync()) {
@@ -97,6 +97,17 @@ void main(List<String> args) {
       content = content.replaceAll(RegExp(r'^APP_NAME=.*$', multiLine: true), 'APP_NAME=$newAppName');
       envFile.writeAsStringSync(content);
     }
+  }
+
+  // 6. Update package.json
+  print('==> [6/6] Updating package.json...');
+  final packageJsonFile = File('package.json');
+  if (packageJsonFile.existsSync()) {
+    var content = packageJsonFile.readAsStringSync();
+    final npmName = newPkg.replaceAll('_', '-');
+    content = content.replaceAll(RegExp(r'"name":\s*"[^"]*"'), '"name": "$npmName"');
+    content = content.replaceAll(RegExp(r'"description":\s*"[^"]*"'), '"description": "Script shortcuts for $newAppName"');
+    packageJsonFile.writeAsStringSync(content);
   }
 
   print('\n=================================================================');

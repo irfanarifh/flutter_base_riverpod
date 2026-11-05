@@ -1,8 +1,8 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_template/core/config/env.dart';
 import 'package:flutter_template/core/config/flavor.dart';
 import 'package:flutter_template/core/services/logger_service.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class _FakeLoggerService extends LoggerService {
   String? lastWarning;
@@ -86,12 +86,12 @@ void main() {
 
   group('Env.validateFlavor', () {
     test('does not throw when .env FLAVOR matches target flavor', () {
-      dotenv.testLoad(fileInput: 'FLAVOR=dev\nBASE_URL=https://dev.example.com\n');
+      dotenv.loadFromString(envString: 'FLAVOR=dev\nBASE_URL=https://dev.example.com\n');
       expect(() => Env.validateFlavor(Flavor.dev), returnsNormally);
     });
 
     test('logs warning without throwing in non-release mode on mismatch', () {
-      dotenv.testLoad(fileInput: 'FLAVOR=staging\nBASE_URL=https://staging.example.com\n');
+      dotenv.loadFromString(envString: 'FLAVOR=staging\nBASE_URL=https://staging.example.com\n');
       final fakeLogger = _FakeLoggerService();
 
       expect(
@@ -108,7 +108,7 @@ void main() {
     });
 
     test('throws StateError in release mode on mismatch', () {
-      dotenv.testLoad(fileInput: 'FLAVOR=dev\nBASE_URL=https://dev.example.com\n');
+      dotenv.loadFromString(envString: 'FLAVOR=dev\nBASE_URL=https://dev.example.com\n');
 
       expect(
         () => Env.validateFlavor(Flavor.prod, isRelease: true),

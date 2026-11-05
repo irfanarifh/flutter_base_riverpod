@@ -6,186 +6,105 @@ part of 'example_detail_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$exampleDetailControllerHash() =>
-    r'cee4f5d8d85ef97385ea1926f6367c40d87e984b';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$ExampleDetailController
-    extends BuildlessAutoDisposeAsyncNotifier<ExampleItem?> {
-  late final int id;
-
-  FutureOr<ExampleItem?> build(
-    int id,
-  );
-}
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Family controller managing the asynchronous state of a single example item by its [id].
-///
-/// Copied from [ExampleDetailController].
+
 @ProviderFor(ExampleDetailController)
-const exampleDetailControllerProvider = ExampleDetailControllerFamily();
+final exampleDetailControllerProvider = ExampleDetailControllerFamily._();
 
 /// Family controller managing the asynchronous state of a single example item by its [id].
-///
-/// Copied from [ExampleDetailController].
-class ExampleDetailControllerFamily extends Family<AsyncValue<ExampleItem?>> {
+final class ExampleDetailControllerProvider
+    extends $AsyncNotifierProvider<ExampleDetailController, ExampleItem?> {
   /// Family controller managing the asynchronous state of a single example item by its [id].
-  ///
-  /// Copied from [ExampleDetailController].
-  const ExampleDetailControllerFamily();
+  ExampleDetailControllerProvider._({
+    required ExampleDetailControllerFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'exampleDetailControllerProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// Family controller managing the asynchronous state of a single example item by its [id].
-  ///
-  /// Copied from [ExampleDetailController].
-  ExampleDetailControllerProvider call(
-    int id,
-  ) {
-    return ExampleDetailControllerProvider(
-      id,
-    );
+  @override
+  String debugGetCreateSourceHash() => _$exampleDetailControllerHash();
+
+  @override
+  String toString() {
+    return r'exampleDetailControllerProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  ExampleDetailControllerProvider getProviderOverride(
-    covariant ExampleDetailControllerProvider provider,
-  ) {
-    return call(
-      provider.id,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'exampleDetailControllerProvider';
-}
-
-/// Family controller managing the asynchronous state of a single example item by its [id].
-///
-/// Copied from [ExampleDetailController].
-class ExampleDetailControllerProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<ExampleDetailController,
-        ExampleItem?> {
-  /// Family controller managing the asynchronous state of a single example item by its [id].
-  ///
-  /// Copied from [ExampleDetailController].
-  ExampleDetailControllerProvider(
-    int id,
-  ) : this._internal(
-          () => ExampleDetailController()..id = id,
-          from: exampleDetailControllerProvider,
-          name: r'exampleDetailControllerProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$exampleDetailControllerHash,
-          dependencies: ExampleDetailControllerFamily._dependencies,
-          allTransitiveDependencies:
-              ExampleDetailControllerFamily._allTransitiveDependencies,
-          id: id,
-        );
-
-  ExampleDetailControllerProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.id,
-  }) : super.internal();
-
-  final int id;
-
-  @override
-  FutureOr<ExampleItem?> runNotifierBuild(
-    covariant ExampleDetailController notifier,
-  ) {
-    return notifier.build(
-      id,
-    );
-  }
-
-  @override
-  Override overrideWith(ExampleDetailController Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: ExampleDetailControllerProvider._internal(
-        () => create()..id = id,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        id: id,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<ExampleDetailController, ExampleItem?>
-      createElement() {
-    return _ExampleDetailControllerProviderElement(this);
-  }
+  ExampleDetailController create() => ExampleDetailController();
 
   @override
   bool operator ==(Object other) {
-    return other is ExampleDetailControllerProvider && other.id == id;
+    return other is ExampleDetailControllerProvider &&
+        other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ExampleDetailControllerRef
-    on AutoDisposeAsyncNotifierProviderRef<ExampleItem?> {
-  /// The parameter `id` of this provider.
-  int get id;
-}
+String _$exampleDetailControllerHash() =>
+    r'c12371b1af722a7c2efb16f27bd5c2c38d3fedd5';
 
-class _ExampleDetailControllerProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<ExampleDetailController,
-        ExampleItem?> with ExampleDetailControllerRef {
-  _ExampleDetailControllerProviderElement(super.provider);
+/// Family controller managing the asynchronous state of a single example item by its [id].
+
+final class ExampleDetailControllerFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          ExampleDetailController,
+          AsyncValue<ExampleItem?>,
+          ExampleItem?,
+          FutureOr<ExampleItem?>,
+          int
+        > {
+  ExampleDetailControllerFamily._()
+    : super(
+        retry: null,
+        name: r'exampleDetailControllerProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Family controller managing the asynchronous state of a single example item by its [id].
+
+  ExampleDetailControllerProvider call(int id) =>
+      ExampleDetailControllerProvider._(argument: id, from: this);
 
   @override
-  int get id => (origin as ExampleDetailControllerProvider).id;
+  String toString() => r'exampleDetailControllerProvider';
 }
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+
+/// Family controller managing the asynchronous state of a single example item by its [id].
+
+abstract class _$ExampleDetailController extends $AsyncNotifier<ExampleItem?> {
+  late final _$args = ref.$arg as int;
+  int get id => _$args;
+
+  FutureOr<ExampleItem?> build(int id);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<ExampleItem?>, ExampleItem?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<ExampleItem?>, ExampleItem?>,
+              AsyncValue<ExampleItem?>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, () => build(_$args));
+  }
+}

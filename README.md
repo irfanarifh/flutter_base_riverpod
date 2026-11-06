@@ -180,9 +180,14 @@ npm test        # verify that all unit and widget tests pass (100% pass rate)
    ```bash
    npm run feature my_feature_name
    ```
-3. **Launch the App**:
+3. **Generate Boilerplate Code**:
+   Generate the required Freezed & Riverpod code (`.freezed.dart`, `.g.dart`):
    ```bash
-   npm run dev    # or: flutter run --flavor dev
+   npm run codegen   # or keep 'npm run watch' running in a separate terminal
+   ```
+4. **Launch the App**:
+   ```bash
+   npm run dev       # or: flutter run --flavor dev
    ```
 
 ---
@@ -401,7 +406,12 @@ This generates:
 The example feature is completely modular and self-contained. If your project does not require local SQLite persistence (Drift) or the example CRUD sample, follow these clean removal steps:
 
 1. **Delete the example directories:**
-   ```bash
+   ```powershell
+   # PowerShell (Windows)
+   Remove-Item -Recurse -Force lib/features/example/
+   Remove-Item -Recurse -Force test/features/example/
+
+   # Bash / macOS / Linux
    rm -rf lib/features/example/
    rm -rf test/features/example/
    ```
@@ -413,12 +423,23 @@ The example feature is completely modular and self-contained. If your project do
    - In `lib/app/router/app_routes.dart`, delete `examplePath`, `exampleName`, `exampleDetailPath`, `exampleDetailName`.
 4. **Remove the tab from the shell navigation:**
    - In `lib/app/router/shell/main_shell.dart`, remove the `NavigationDestination` entry for the Example tab.
-5. **Increment `schemaVersion`:**
+5. **Clean up mocks and test helpers:**
+   - In `test/helpers/mocks.dart`:
+     - Remove imports of `ExampleRepository` and `ExampleItem`.
+     - Remove `MockExampleRepository`, `FakeExampleItem`, and `registerFallbackValue(FakeExampleItem())`.
+     - Remove `TestFixtures.testItem`.
+   - In `integration_test/app_test.dart`:
+     - Remove steps 3 & 4 that interact with the Example list and modal sheet.
+6. **Increment `schemaVersion` (or remove Drift entirely):**
    - In `lib/core/database/app_database.dart`, bump `schemaVersion` (e.g. from `1` to `2`).
-   - _(If removing Drift entirely, delete `lib/core/database/` and remove `drift`, `drift_flutter`, and `drift_dev` from `pubspec.yaml`)._
-6. **Re-run code generation:**
+   - _(If removing Drift entirely):_
+     - Delete `lib/core/database/` and `test/helpers/test_database.dart`.
+     - In `integration_test/app_test.dart`, remove `testDb` initialization and `appDatabaseProvider` override.
+     - In `pubspec.yaml`, remove `drift`, `drift_flutter`, and `drift_dev`.
+7. **Re-run code generation & tests:**
    ```bash
-   dart run tool/codegen.dart
+   npm run sync
+   # or: dart run tool/sync.dart
    ```
 
 ---

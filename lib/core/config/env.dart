@@ -1,4 +1,4 @@
-﻿import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'package:flutter/foundation.dart' show kReleaseMode;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_template/core/config/flavor.dart';
 import 'package:flutter_template/core/services/logger_service.dart';
@@ -34,9 +34,8 @@ abstract final class Env {
 
   /// Whether auth uses `MockAuthApi` instead of the real backend.
   ///
-  /// Defaults to `true` in debug/profile and `false` in release, so a release
-  /// build with a missing `USE_MOCK_API` key can never ship the mock.
-  static bool get useMockApi => dotenv.get('USE_MOCK_API', fallback: kReleaseMode ? 'false' : 'true').toLowerCase() == 'true';
+  /// Defaults to `false` if `USE_MOCK_API` is not specified in the loaded .env file.
+  static bool get useMockApi => dotenv.get('USE_MOCK_API', fallback: 'false').toLowerCase() == 'true';
 
   static Duration get connectTimeout {
     final rawMs = int.tryParse(dotenv.get('CONNECT_TIMEOUT_MS', fallback: '15000'));

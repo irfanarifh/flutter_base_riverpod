@@ -1,20 +1,4 @@
-﻿// =============================================================================
-// HOW TO REMOVE THIS FEATURE
-// =============================================================================
-// 1. Delete folder: `lib/features/example/`.
-// 2. Remove table from `AppDatabase`:
-//    - In `lib/core/database/app_database.dart`, remove `ExampleItems` from `@DriftDatabase(tables: [...])`.
-//    - Delete `lib/core/database/tables/example_items_table.dart`.
-// 3. Remove routes from `lib/app/router/app_router.dart`:
-//    - Remove the branch/routes for `ExampleListScreen` and `ExampleDetailScreen`.
-//    - In `lib/app/router/app_routes.dart`, delete `examplePath`, `exampleName`, `exampleDetailPath`, `exampleDetailName`.
-// 4. Remove tab from `lib/app/router/shell/main_shell.dart`:
-//    - Remove the Example NavigationDestination from the navigation bar.
-// 5. Bump `schemaVersion`:
-//    - In `lib/core/database/app_database.dart`, increment `schemaVersion` (e.g. from 1 to 2).
-// 6. Re-run codegen:
-//    - Run `dart run build_runner build -d`.
-// =============================================================================
+// For removal instructions, see Section 9 in README.md.
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/database/app_database_provider.dart';

@@ -25,16 +25,13 @@ abstract final class Env {
     return url.trim();
   }
 
-  /// Safe to call before dotenv is loaded (returns `false`), so error
-  /// reporting never throws while bootstrap itself is failing.
+  /// Safe to call before dotenv is loaded (returns `false`).
   static bool get enableLogging {
     if (!dotenv.isInitialized) return false;
     return dotenv.get('ENABLE_LOGGING', fallback: 'false').toLowerCase() == 'true';
   }
 
-  /// Whether auth uses `MockAuthApi` instead of the real backend.
-  ///
-  /// Defaults to `false` if `USE_MOCK_API` is not specified in the loaded .env file.
+  /// Whether auth uses `MockAuthApi` instead of real backend (defaults to `false`).
   static bool get useMockApi => dotenv.get('USE_MOCK_API', fallback: 'false').toLowerCase() == 'true';
 
   static Duration get connectTimeout {
@@ -42,12 +39,7 @@ abstract final class Env {
     return Duration(milliseconds: rawMs ?? 15000);
   }
 
-  /// Compares the `FLAVOR` value in the loaded .env file with the [flavor]
-  /// passed to bootstrap.
-  ///
-  /// On mismatch:
-  /// - In non-release mode ([isRelease] == false): logs a warning via [LoggerService].
-  /// - In release mode ([isRelease] == true): throws a [StateError].
+  /// Validates loaded `FLAVOR` against bootstrap flavor, throwing in release mode on mismatch.
   static void validateFlavor(
     Flavor flavor, {
     bool isRelease = kReleaseMode,

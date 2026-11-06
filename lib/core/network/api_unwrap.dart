@@ -1,16 +1,10 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/core/network/api_response.dart';
 
 /// Helpers to read the `{code, message, data}` envelope from a Dio [Response].
-///
-/// Failing codes are normally rejected earlier by `ApiResponseInterceptor`;
-/// the checks here keep the helpers safe when used with a bare [Dio] client.
 extension ApiResponseUnwrap on Response<dynamic> {
-  /// Returns the envelope `data`, parsed with [fromJson].
-  ///
-  /// Throws [ServerException] when the code is not successful and
-  /// [UnknownException] when the body is not an envelope or has no data.
+  /// Returns envelope `data` parsed with [fromJson], throwing if failed or empty.
   T unwrap<T>(T Function(Object? json) fromJson) {
     final parsed = _parse<T>(fromJson);
     final value = parsed.data;

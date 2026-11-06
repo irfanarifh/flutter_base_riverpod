@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/config/env.dart';
 import 'package:flutter_template/core/extensions/context_extension.dart';
@@ -11,8 +11,7 @@ import 'package:flutter_template/shared/widgets/dialogs/confirm_dialog.dart';
 import 'package:flutter_template/shared/widgets/layout/app_scaffold.dart';
 import 'package:flutter_template/shared/widgets/layout/section_header.dart';
 
-/// Settings screen providing theme, localization, application information,
-/// and decoupled session termination.
+/// Settings screen providing theme, localization, app info, and logout.
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 

@@ -7,8 +7,7 @@ import 'package:flutter_template/core/theme/app_theme.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
-/// Extension on [WidgetTester] providing standard environment bootstrapping
-/// with Riverpod [ProviderScope], Material 3 [AppTheme], and localized strings.
+/// Extension on [WidgetTester] bootstrapping [ProviderScope], [AppTheme], and localizations.
 extension PumpApp on WidgetTester {
   /// Pumps the widget tree configured with standard app delegates and optional overrides.
   Future<void> pumpApp({

@@ -5,12 +5,7 @@ enum Flavor {
   staging,
   prod;
 
-  /// Resolves the active [Flavor] from Flutter's native `appFlavor` value.
-  ///
-  /// - When [value] is null and [isRelease] is false: defaults to [Flavor.dev].
-  /// - When [value] is null and [isRelease] is true: throws a [StateError].
-  /// - When [value] matches a [Flavor] name: returns the corresponding [Flavor].
-  /// - When [value] does not match any [Flavor] name: throws a [StateError].
+  /// Resolves active [Flavor] from native `appFlavor`, defaulting to dev in debug and failing in release.
   static Flavor fromAppFlavor(
     String? value, {
     bool isRelease = kReleaseMode,

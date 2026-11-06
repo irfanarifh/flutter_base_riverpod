@@ -1,4 +1,4 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/config/env.dart';
 import 'package:flutter_template/core/network/interceptors/api_response_interceptor.dart';
@@ -38,8 +38,7 @@ final dioProvider = Provider<Dio>((ref) {
       storageService: storageService,
       ref: ref,
     ),
-    // Must come after AuthInterceptor (handles code -99) and before Logging so
-    // rejected envelopes are still logged through onError.
+    // Placed after AuthInterceptor (-99 handler) and before LoggingInterceptor.
     ApiResponseInterceptor(),
     LoggingInterceptor(loggerService),
     ErrorInterceptor(),

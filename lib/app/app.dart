@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/app/l10n/app_localizations.dart';
 import 'package:flutter_template/app/router/app_router.dart';
@@ -18,8 +18,7 @@ class App extends ConsumerWidget {
     final themeMode = ref.watch(themeModeControllerProvider);
     final locale = ref.watch(localeControllerProvider);
 
-    // Keep the native splash until the stored session has been restored, so
-    // the user never sees an empty frame before the router redirects.
+    // Keep native splash until session is restored to prevent empty frames.
     ref.listen(authControllerProvider, (_, next) {
       if (!next.isLoading) SplashGuard.remove();
     });

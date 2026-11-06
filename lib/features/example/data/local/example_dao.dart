@@ -1,10 +1,7 @@
-﻿import 'package:drift/drift.dart' as drift;
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter_template/core/database/app_database.dart' as db;
 
 /// Data Access Object for local SQLite operations on the [db.ExampleItems] table.
-///
-/// Implemented as a plain class without [DatabaseAccessor] inheritance to keep
-/// table registration decoupled and modular without touching [AppDatabase].
 class ExampleDao {
   const ExampleDao(this._db);
 

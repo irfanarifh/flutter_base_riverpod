@@ -1,18 +1,8 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_template/core/errors/error_mapper.dart';
 import 'package:flutter_template/core/network/api_response.dart';
 
-/// Turns HTTP 2xx responses that carry a failing `{code, message, data}`
-/// envelope into a [DioException].
-///
-/// Dio treats every 2xx status as success, but this backend reports business
-/// failures (wrong password, validation errors, ...) with HTTP 200 and a
-/// `code` other than [ApiResponse.successCode]. Without this interceptor those
-/// responses would be parsed as if they succeeded.
-///
-/// Responses that have no `code` key (third-party APIs, plain JSON) pass
-/// through untouched. The unauthenticated code (`-99`) is handled earlier by
-/// `AuthInterceptor`, so register this interceptor after it.
+/// Converts HTTP 2xx responses carrying business error envelopes into [DioException].
 class ApiResponseInterceptor extends Interceptor {
   @override
   void onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) {

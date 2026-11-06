@@ -1,4 +1,5 @@
-﻿import 'package:flutter_template/core/services/logger_service.dart';
+import 'package:flutter_template/core/network/api_manager.dart';
+import 'package:flutter_template/core/services/logger_service.dart';
 import 'package:flutter_template/core/services/storage_service.dart';
 import 'package:flutter_template/features/auth/data/auth_repository.dart';
 import 'package:flutter_template/features/auth/model/login_request.dart';
@@ -9,6 +10,9 @@ import 'package:mocktail/mocktail.dart';
 
 /// Mock of [AuthRepository] for authentication testing.
 class MockAuthRepository extends Mock implements AuthRepository {}
+
+/// Mock of [ApiManager] for network testing.
+class MockApiManager extends Mock implements ApiManager {}
 
 /// Mock of [ExampleRepository] for example feature testing.
 class MockExampleRepository extends Mock implements ExampleRepository {}

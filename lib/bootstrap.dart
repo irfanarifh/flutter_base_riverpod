@@ -47,14 +47,11 @@ Future<void> bootstrap({required Flavor flavor}) async {
 
         runApp(
           ProviderScope(
-            // In Riverpod 3, failing providers retry automatically by default.
-            // Disable global retry to preserve deterministic error handling across UI states.
-            // Trade-off: Transient network errors won't automatically self-heal without user action (e.g. pull-to-refresh).
+            // In Riverpod 3, disable global retry for deterministic error handling.
             retry: (retryCount, error) => null,
             overrides: [
               sharedPrefsProvider.overrideWithValue(prefs),
-              // Features must not import each other, so the logout action is
-              // wired here, where every layer is allowed to be imported.
+              // Decoupled logout action wired here where all layers can be imported.
               logoutActionProvider.overrideWith(
                 (ref) => () => ref.read(authControllerProvider.notifier).logout(),
               ),
@@ -63,8 +60,7 @@ Future<void> bootstrap({required Flavor flavor}) async {
           ),
         );
 
-        // The app removes the splash once the session is restored; this is a
-        // safety net for slow networks.
+        // Safety net timeout to release native splash on slow networks.
         unawaited(Future<void>.delayed(_splashTimeout, SplashGuard.remove));
       } catch (error, stack) {
         LoggerService.recordError(error, stack);
@@ -82,8 +78,7 @@ Future<void> bootstrap({required Flavor flavor}) async {
   );
 }
 
-/// Minimal fallback UI shown when initialization fails (for example a missing
-/// `.env` file). It must not depend on Riverpod, theming or localization.
+/// Minimal fallback UI displayed when bootstrap initialization fails.
 class _BootstrapErrorApp extends StatelessWidget {
   const _BootstrapErrorApp({required this.message});
 

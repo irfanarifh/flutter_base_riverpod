@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Centralized typographic scale adhering to Material 3 specifications
-/// styled with the Plus Jakarta Sans typeface.
+/// Material 3 typographic scale using Plus Jakarta Sans typeface.
 abstract final class AppTextStyles {
   // Display styles - Large, short, high-emphasis text
   static TextStyle displayLarge = GoogleFonts.plusJakartaSans(

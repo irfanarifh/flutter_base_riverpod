@@ -1,7 +1,6 @@
-﻿import 'package:flutter_template/core/errors/app_exception.dart';
+import 'package:flutter_template/core/errors/app_exception.dart';
 
-/// A discriminated union representing either a successful [data] payload
-/// or a typed [exception] failure.
+/// Discriminated union representing either a successful [data] payload or an [exception].
 sealed class Result<T> {
   const Result();
 

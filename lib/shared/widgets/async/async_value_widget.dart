@@ -1,12 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/shared/widgets/feedback/empty_view.dart';
 import 'package:flutter_template/shared/widgets/feedback/error_view.dart';
 import 'package:flutter_template/shared/widgets/feedback/loading_indicator.dart';
 
-/// Reusable generic widget wrapping Riverpod [AsyncValue] states with standard
-/// loading, error (with retry), and optional empty-state handling.
+/// Reusable generic widget wrapping Riverpod [AsyncValue] states.
 class AsyncValueWidget<T> extends StatelessWidget {
   const AsyncValueWidget({
     super.key,

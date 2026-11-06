@@ -1,4 +1,4 @@
-﻿import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_template/core/config/env.dart';
 import 'package:flutter_template/core/services/logger_service.dart';
 
@@ -21,10 +21,7 @@ const Set<String> _sensitiveKeys = <String>{
 
 const String _redacted = '[REDACTED]';
 
-/// Returns a copy of [data] with sensitive values replaced by `[REDACTED]`.
-///
-/// Walks nested maps and lists. Non-JSON payloads (e.g. `FormData`) are
-/// replaced by a short placeholder instead of being printed.
+/// Returns a copy of [data] with sensitive keys replaced by `[REDACTED]`.
 Object? redactSensitive(Object? data) {
   if (data is Map) {
     return <String, Object?>{

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_template/core/errors/app_exception.dart';
 import 'package:flutter_template/core/extensions/string_extension.dart';
-import 'package:flutter_template/core/network/api_unwrap.dart';
+import 'package:flutter_template/core/network/api_manager.dart';
 import 'package:flutter_template/features/auth/model/auth_token.dart';
 import 'package:flutter_template/features/auth/model/login_request.dart';
 import 'package:flutter_template/features/auth/model/user.dart';
@@ -12,9 +12,7 @@ abstract class AuthApi {
   Future<User> getMe(String token);
 }
 
-/// REPLACEABLE: Mock authentication API implementation for local development.
-///
-/// Accepts any email with valid format and password with length >= 6.
+/// Mock authentication API implementation for local development.
 class MockAuthApi implements AuthApi {
   @override
   Future<AuthToken> login(LoginRequest request) async {
@@ -41,36 +39,29 @@ class MockAuthApi implements AuthApi {
   }
 }
 
-/// Real HTTP authentication API consuming backend endpoints.
-///
-/// Expects the `{code, message, data}` envelope; failing codes are rejected by
-/// `ApiResponseInterceptor` before reaching these methods.
+/// Real HTTP authentication API consuming backend endpoints via [ApiManager].
 class RealAuthApi implements AuthApi {
-  const RealAuthApi(this._dio);
+  const RealAuthApi(this._apiManager);
 
-  final Dio _dio;
+  final ApiManager _apiManager;
 
   @override
-  Future<AuthToken> login(LoginRequest request) async {
-    final response = await _dio.post<Map<String, dynamic>>(
+  Future<AuthToken> login(LoginRequest request) {
+    return _apiManager.post<AuthToken>(
       '/auth/login',
       data: request.toJson(),
-    );
-    return response.unwrap(
-      (json) => AuthToken.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => AuthToken.fromJson(json! as Map<String, dynamic>),
     );
   }
 
   @override
-  Future<User> getMe(String token) async {
-    final response = await _dio.get<Map<String, dynamic>>(
+  Future<User> getMe(String token) {
+    return _apiManager.get<User>(
       '/auth/me',
       options: Options(
         headers: {'Authorization': 'Bearer $token'},
       ),
-    );
-    return response.unwrap(
-      (json) => User.fromJson(json! as Map<String, dynamic>),
+      fromJson: (json) => User.fromJson(json! as Map<String, dynamic>),
     );
   }
 }

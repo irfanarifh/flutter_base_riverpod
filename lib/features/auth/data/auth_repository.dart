@@ -18,10 +18,7 @@ class AuthRepository {
   final AuthApi _authApi;
   final StorageService _storageService;
 
-  /// Authenticates user credentials, caches the access token, and returns the [User].
-  ///
-  /// If fetching the profile fails after the token was saved, the token is
-  /// removed again so no half-finished session is left behind.
+  /// Authenticates user, securely stores access token, and returns the profile.
   Future<User> login(String email, String password) async {
     try {
       final token = await _authApi.login(
@@ -50,13 +47,7 @@ class AuthRepository {
     await _clearSession();
   }
 
-  /// Restores the session from secure storage.
-  ///
-  /// - No token: returns `null`.
-  /// - Token rejected by the server (unauthorized): clears the session and
-  ///   returns `null`.
-  /// - Any other failure (offline, timeout, server down): keeps the token and
-  ///   returns the cached user, so the app stays usable offline.
+  /// Restores session from secure storage, falling back to cached user when offline.
   Future<User?> restoreSession() async {
     final token = await _storageService.readToken();
     if (token == null || token.isEmpty) {

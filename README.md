@@ -248,13 +248,13 @@ Or using native Flutter CLI:
 # APK
 flutter build apk --flavor dev
 flutter build apk --flavor staging
-flutter build apk --flavor prod
+flutter build apk --flavor prod --obfuscate --split-debug-info=build/symbols
 
 # Android App Bundle (AAB for Google Play)
-flutter build appbundle --flavor prod
+flutter build appbundle --flavor prod --obfuscate --split-debug-info=build/symbols
 
 # iOS
-flutter build ipa --flavor prod
+flutter build ipa --flavor prod --obfuscate --split-debug-info=build/symbols
 ```
 
 > [!WARNING]
@@ -646,13 +646,13 @@ Run `npm run` without arguments in your terminal to see the full list of availab
 
 | Script | Command | Description |
 |---|---|---|
-| `npm run build` | `flutter build apk --flavor prod` | Builds production release APK |
-| `npm run build:dev` | `flutter build apk --flavor dev` | Builds development release APK |
+| `npm run build` | `flutter build apk --flavor prod --obfuscate --split-debug-info=build/symbols` | Builds production release APK with code obfuscation |
+| `npm run build:dev` | `flutter build apk --flavor dev` | Builds development release APK (unobfuscated for debugging) |
 | `npm run build:staging` | `flutter build apk --flavor staging` | Builds staging release APK |
-| `npm run build:prod` | `flutter build apk --flavor prod` | Builds production release APK |
-| `npm run build:aab` | `flutter build appbundle --flavor prod` | Builds production Android App Bundle (AAB for Google Play) |
-| `npm run build:ipa` | `flutter build ipa --flavor prod` | Builds production iOS archive (.ipa) |
-| `npm run build:ios` | `flutter build ios --flavor prod` | Builds production iOS bundle |
+| `npm run build:prod` | `flutter build apk --flavor prod --obfuscate --split-debug-info=build/symbols` | Builds production release APK with code obfuscation |
+| `npm run build:aab` | `flutter build appbundle --flavor prod --obfuscate --split-debug-info=build/symbols` | Builds production Android App Bundle with code obfuscation (Google Play) |
+| `npm run build:ipa` | `flutter build ipa --flavor prod --obfuscate --split-debug-info=build/symbols` | Builds production iOS archive (.ipa) with code obfuscation |
+| `npm run build:ios` | `flutter build ios --flavor prod --obfuscate --split-debug-info=build/symbols` | Builds production iOS bundle with code obfuscation |
 
 ### Code Generation & Assets
 

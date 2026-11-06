@@ -97,7 +97,7 @@ Use these steps if you only want to run the base template locally to explore the
 When cloning this repository to build a **brand-new application**, follow this sequential checklist:
 
 ### Step 1: Clone and Re-initialize Git Remote
-Clone the base repository and redirect `origin` to your own remote repository:
+Clone the base repository, point `origin` to your own remote repository, and adopt your new repository's target branch:
 
 ```bash
 git clone <template-repository-url> my_new_app
@@ -105,7 +105,29 @@ cd my_new_app
 
 # Point origin to your newly created repository
 git remote set-url origin <your-new-repository-url>
+
+# Fetch branches and metadata from your new remote
+git fetch
+
+# Inspect local branches (check your current template branch, e.g. 'main')
+git branch
+
+# Switch to your new remote's branch (adjust 'master' to match your new repo's branch)
+git switch master
+
+# Restore/copy all template files from the template branch into your new repo branch
+# (adjust '--source=main' to match your template's branch name)
+git restore --source=main --staged --worktree .
+
+# Delete the template's local branch (adjust 'main' to match your template's branch name)
+git branch -D main
 ```
+
+> [!TIP]
+> **Branch Name Flexibility:**
+> The branch names above (`main` for template repo, `master` for new repo) are illustrative examples. Adjust them to match your actual repositories:
+> - **Template on `master` and new repo on `main`**: use `git switch main`, `git restore --source=master --staged --worktree .`, and `git branch -D master`.
+> - **Both repos share the same branch name** or the new remote is completely empty (no initial commit): you can skip `restore` and simply push directly with `git push -u origin <branch-name>`.
 
 ### Step 2: Rename Identifiers & Package Name
 Run the automated renaming utility to rebrand the package name, bundle identifiers (Android & iOS), application display name, and `package.json`:

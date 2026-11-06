@@ -130,14 +130,17 @@ git branch -D main
 > - **Both repos share the same branch name** or the new remote is completely empty (no initial commit): you can skip `restore` and simply push directly with `git push -u origin <branch-name>`.
 
 ### Step 2: Rename Identifiers & Package Name
-Run the automated renaming utility to rebrand the package name, bundle identifiers (Android & iOS), application display name, and `package.json`:
+Run the automated renaming utility to rebrand the package name, application display name, and bundle identifiers (Android & iOS):
 
 ```bash
-# Using npm
-npm run rename my_new_app com.company.mynewapp "My New App"
+# If Android and iOS share the same bundle ID (iOS defaults to the Android ID):
+npm run rename my_new_app "My New App" com.company.mynewapp
 
-# Or using Dart directly
-dart run tool/rename_project.dart my_new_app com.company.mynewapp "My New App"
+# If Android and iOS use different bundle IDs (pass iOS bundle ID as 4th argument):
+npm run rename my_new_app "My New App" com.company.androidapp com.company.iosapp
+
+# Optional flags: --dry-run (simulation), --yes (skip prompt), --force (bypass git check)
+npm run rename my_new_app "My New App" com.company.mynewapp -- --dry-run
 ```
 
 ### Step 3: Configure Environment Variables
@@ -513,23 +516,37 @@ testWidgets('renders screen with mock repository', (tester) async {
 To rename the project from `flutter_template` to your desired application identifier, run the provided utility script:
 
 ```bash
-dart run tool/rename_project.dart <package_name> <bundle_id> "<App Name>"
+dart run tool/rename_project.dart <package_name> "<App Name>" <android_id> [ios_bundle_id] [--yes] [--dry-run] [--force]
 ```
 
-**Example:**
+**Flags:**
+- `--dry-run`: Simulates all file modifications and directory moves without writing any changes to disk.
+- `--yes`: Non-interactive execution; skips the confirmation prompt.
+- `--force`: Allows execution even if the Git working tree has uncommitted modifications.
+
+**Examples:**
 
 ```bash
-dart run tool/rename_project.dart my_super_app com.company.superapp "My Super App"
+# 1. Same identifier for Android and iOS (iOS defaults to the Android ID):
+dart run tool/rename_project.dart my_super_app "My Super App" com.company.superapp
+
+# 2. Distinct identifiers for Android and iOS:
+dart run tool/rename_project.dart my_super_app "My Super App" com.company.androidapp com.company.iosapp
+
+# 3. Dry-run simulation:
+dart run tool/rename_project.dart my_super_app "My Super App" com.company.superapp --dry-run
 ```
 
-The script automatically updates:
+The script automatically detects current identifiers dynamically and updates:
 
-- `pubspec.yaml`
-- All `package:flutter_template/...` imports in `lib/`, `test/`, and `integration_test/`
-- Android `applicationId` and `app_name` in `android/app/build.gradle.kts`
-- iOS `PRODUCT_BUNDLE_IDENTIFIER` and `APP_DISPLAY_NAME` in project configs
-- `APP_NAME` values across all `.env.*` files
+- `pubspec.yaml` (package name)
+- All `package:<old_pkg>/...` imports in `lib/`, `test/`, `integration_test/`, and `tool/`
+- Android `namespace`, `applicationId`, and per-flavor `app_name` in `android/app/build.gradle.kts`
+- Android `MainActivity` file location and package declaration (`android/app/src/*/kotlin|java`)
+- iOS `PRODUCT_BUNDLE_IDENTIFIER` (in `project.pbxproj`), `CFBundleName`, `CFBundleDisplayName` (in `Info.plist`), and `APP_DISPLAY_NAME` in `ios/Flutter/{Dev,Staging,Prod}.xcconfig`
+- `APP_NAME` values across all `.env.*` files (preserving `(Dev)` and `(Staging)` suffixes)
 - `name` and `description` in `package.json`
+- Scans all files for old leftovers upon completion
 
 After running the script, re-synchronize the project:
 
@@ -645,7 +662,7 @@ Before publishing or onboarding your engineering team onto this template, ensure
 - [x] **Branding**: Launcher icons and native splash screens configured and generated for Android and iOS.
 - [x] **Testing**: run `flutter test` and confirm everything passes.
 - [x] **Static Analysis**: run `flutter analyze` and confirm 0 warnings and 0 errors.
-- [x] **Automated Tooling**: `tool/codegen.dart`, `tool/new_feature.dart`, and `tool/rename_project.dart` cross-platform scripts tested and operational.
+- [ ] **Automated Tooling**: `tool/codegen.dart` and `tool/new_feature.dart` operational; `tool/rename_project.dart` requires end-to-end verification.
 
 ---
 
@@ -709,5 +726,5 @@ Run `npm run` without arguments in your terminal to see the full list of availab
 | `npm run clean:get` | `flutter clean && flutter pub get` | Cleans build cache and re-downloads dependencies |
 | `npm run fresh` | `flutter clean && flutter pub get && dart run tool/codegen.dart` | Complete project reset and full code regeneration |
 | `npm run feature <name>` | `dart run tool/new_feature.dart <name>` | Scaffolds standard feature module structure (`data`, `model`, `controller`, `view`) |
-| `npm run rename <pkg> <id> "<Name>"` | `dart run tool/rename_project.dart ...` | Renames project identifiers across Android, iOS, `.env`, Dart imports, and `package.json` |
+| `npm run rename <pkg> "<Name>" <android_id> [ios_id]` | `dart run tool/rename_project.dart ...` | Renames project identifiers across Android, iOS, `.env`, Dart imports, and `package.json` |
 

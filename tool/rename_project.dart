@@ -1,18 +1,6 @@
-// ignore_for_file: avoid_print
-
 import 'dart:io';
 
-const Set<String> _skippedDirNames = {'build', '.dart_tool', '.gradle', 'Pods', '.git', 'node_modules', '.idea'};
-
-const Set<String> _binaryExtensions = {
-  '.png', '.jpg', '.jpeg', '.gif', '.ico', '.webp', '.svgz',
-  '.zip', '.tar', '.gz', '.jar', '.aar', '.class', '.so', '.dylib', '.a',
-  '.pdf', '.mp3', '.mp4', '.wav', '.ttf', '.otf', '.woff', '.woff2',
-  // Logs (for example build_runner.log) are output, not source.
-  '.log',
-};
-
-const Set<String> _dartReservedKeywords = {
+const _dartReservedKeywords = {
   'abstract',
   'as',
   'assert',
@@ -82,6 +70,58 @@ const Set<String> _dartReservedKeywords = {
   'yield',
 };
 
+const _skippedDirNames = {'.git', '.dart_tool', '.gradle', 'build', 'Pods', 'node_modules', '.idea', '.vscode'};
+
+const _binaryExtensions = {
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.webp',
+  '.ico',
+  '.bmp',
+  '.ttf',
+  '.otf',
+  '.woff',
+  '.woff2',
+  '.zip',
+  '.tar',
+  '.gz',
+  '.7z',
+  '.rar',
+  '.pdf',
+  '.so',
+  '.dylib',
+  '.dll',
+  '.exe',
+  '.a',
+  '.o',
+  '.jar',
+  '.aar',
+  '.keystore',
+  '.jks',
+};
+
+/// XML-escapes `&`, `<`, `>`, `'` for safe insertion into plist/xml files.
+String _xmlEscape(String text) {
+  return text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll("'", '&apos;');
+}
+
+/// Escapes `\`, `'`, and `$` for Dart single-quoted string literals.
+String _escapeDartSingleQuoted(String text) {
+  return text.replaceAll(r'\', r'\\').replaceAll(r"'", r"\'").replaceAll(r'$', r'\$');
+}
+
+/// Escapes characters for JSON string literals.
+String _escapeJson(String text) {
+  return text.replaceAll(r'\', r'\\').replaceAll('"', r'\"').replaceAll('\n', r'\n').replaceAll('\r', r'\r').replaceAll('\t', r'\t');
+}
+
+/// Escapes characters for Kotlin double-quoted string literals (`\`, `"`, `$`).
+String _escapeKotlinDoubleQuoted(String text) {
+  return text.replaceAll(r'\', r'\\').replaceAll('"', r'\"').replaceAll(r'$', r'\$');
+}
+
 /// Cross-platform Dart script for renaming the project package name, bundle identifier, and display name.
 /// Usage: `dart run tool/rename_project.dart <package_name> "<App Name>" <android_id> [ios_bundle_id] [--yes] [--dry-run] [--force]`
 void main(List<String> args) {
@@ -133,6 +173,15 @@ void main(List<String> args) {
     exit(1);
   }
 
+  if (RegExp(r'[\x00-\x1F\x7F"\\$]').hasMatch(newAppName)) {
+    stderr.writeln('Error: app_name contains invalid characters.');
+    stderr.writeln('App name must not contain control characters, double quotes ("), backslashes (\\), or dollar signs (\$).');
+    stderr.writeln(
+      'Reason: These characters break build.gradle.kts Kotlin string interpolation, JSON/XML parsing in Info.plist and arb files, or .env shell variable expansion.',
+    );
+    exit(1);
+  }
+
   final bundleIdRegex = RegExp(r'^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$');
 
   // Validate android_id
@@ -178,7 +227,7 @@ void main(List<String> args) {
   print('Package Name : $oldPkg -> $newPkg');
   print('App Name     : $oldAppName -> $newAppName');
   if (newAndroidId == newIosId) {
-    print('Bundle ID    : $oldAndroidId -> $newAndroidId (Android & iOS)');
+    print('Bundle ID    : $oldAndroidId -> $newAndroidId');
   } else {
     print('Android ID   : $oldAndroidId -> $newAndroidId');
     print('iOS Bundle ID: $oldIosId -> $newIosId');
@@ -190,75 +239,86 @@ void main(List<String> args) {
 
   if (!dryRun && !yes) {
     stdout.write('Are you sure you want to proceed? [y/N] ');
-    final input = stdin.readLineSync()?.trim().toLowerCase();
-    if (input != 'y' && input != 'yes') {
+    final input = stdin.readLineSync();
+    if (input == null || input.trim().toLowerCase() != 'y') {
       print('Renaming aborted.');
       exit(0);
     }
   }
 
-  // 1. Update pubspec.yaml
-  _applyFileChange('pubspec.yaml', dryRun, (content) {
-    return content.replaceFirst(RegExp(r'^name:\s*' + RegExp.escape(oldPkg), multiLine: true), 'name: $newPkg');
-  });
+  // 1. Update pubspec.yaml & Dart imports (only if package name changed)
+  if (oldPkg != newPkg) {
+    _applyFileChange('pubspec.yaml', dryRun, (content) {
+      return content.replaceFirst(RegExp(r'^name:\s*' + RegExp.escape(oldPkg), multiLine: true), 'name: $newPkg');
+    });
 
-  // 2. Update Dart imports across lib/, test/, integration_test/, and tool/*.dart
-  for (final dirPath in ['lib', 'test', 'integration_test', 'tool']) {
-    final dir = Directory(dirPath);
-    if (!dir.existsSync()) continue;
-    for (final entity in dir.listSync(recursive: true)) {
-      if (entity is File && entity.path.endsWith('.dart')) {
-        // Exclude tool/rename_project.dart itself from code template rewrites
-        if (_normalizePath(entity.path) == 'tool/rename_project.dart') continue;
-        _applyFileChange(entity.path, dryRun, (content) {
-          return content.replaceAll('package:$oldPkg/', 'package:$newPkg/');
-        });
+    for (final dirPath in ['lib', 'test', 'integration_test', 'tool']) {
+      final dir = Directory(dirPath);
+      if (!dir.existsSync()) continue;
+      for (final entity in dir.listSync(recursive: true)) {
+        if (entity is File && entity.path.endsWith('.dart')) {
+          // Exclude tool/rename_project.dart itself from code template rewrites
+          if (_normalizePath(entity.path) == 'tool/rename_project.dart') continue;
+          _applyFileChange(entity.path, dryRun, (content) {
+            return content.replaceAll('package:$oldPkg/', 'package:$newPkg/');
+          });
+        }
       }
     }
   }
 
-  // 3. Update Android configuration (build.gradle.kts)
+  // 2. Update Android configuration (build.gradle.kts)
   // Only the quoted values are replaced; every other line in a flavor block
   // (signingConfig, versionNameSuffix, ...) is left untouched.
   const androidGradle = 'android/app/build.gradle.kts';
-  if (File(androidGradle).existsSync()) {
+  if (File(androidGradle).existsSync() && (oldAndroidId != newAndroidId || oldAppName != newAppName)) {
     _applyFileChange(androidGradle, dryRun, (content) {
       var updated = content;
-      updated = updated.replaceAll('namespace = "$oldAndroidId"', 'namespace = "$newAndroidId"');
-      updated = updated.replaceAll('applicationId = "$oldAndroidId"', 'applicationId = "$newAndroidId"');
-      updated = _swapFlavorLabel(updated, 'dev', '$newAppName (Dev)');
-      updated = _swapFlavorLabel(updated, 'staging', '$newAppName (Staging)');
-      updated = _swapFlavorLabel(updated, 'prod', newAppName);
+      if (oldAndroidId != newAndroidId) {
+        updated = updated.replaceAll('namespace = "$oldAndroidId"', 'namespace = "$newAndroidId"');
+        updated = updated.replaceAll('applicationId = "$oldAndroidId"', 'applicationId = "$newAndroidId"');
+      }
+      if (oldAppName != newAppName) {
+        updated = _swapFlavorLabel(updated, 'dev', '$newAppName (Dev)');
+        updated = _swapFlavorLabel(updated, 'staging', '$newAppName (Staging)');
+        updated = _swapFlavorLabel(updated, 'prod', newAppName);
+      }
       return updated;
     });
   }
 
-  // 4. Update Android Kotlin/Java source sets (move MainActivity and fix package)
-  _processAndroidSourceSets(oldAndroidId, newAndroidId, dryRun);
+  // 3. Update Android Kotlin/Java source sets (move MainActivity and fix package)
+  if (oldAndroidId != newAndroidId) {
+    _processAndroidSourceSets(oldAndroidId, newAndroidId, dryRun);
+  }
 
-  // 5. Update iOS configuration (project.pbxproj, xcconfig, Info.plist)
+  // 4. Update iOS configuration (project.pbxproj, xcconfig, Info.plist)
   final iosDir = Directory('ios');
   if (iosDir.existsSync()) {
-    for (final entity in iosDir.listSync(recursive: true)) {
-      if (entity is File && entity.path.endsWith('project.pbxproj')) {
-        _applyFileChange(entity.path, dryRun, (content) {
-          var updated = content;
-          updated = updated.replaceAll('$oldIosId.RunnerTests', '$newIosId.RunnerTests');
-          updated = updated.replaceAll(oldIosId, newIosId);
-          return updated;
-        });
+    if (oldIosId != newIosId) {
+      for (final entity in iosDir.listSync(recursive: true)) {
+        if (entity is File && entity.path.endsWith('project.pbxproj')) {
+          _applyFileChange(entity.path, dryRun, (content) {
+            var updated = content;
+            updated = updated.replaceAll('$oldIosId.RunnerTests', '$newIosId.RunnerTests');
+            updated = updated.replaceAll(oldIosId, newIosId);
+            return updated;
+          });
+        }
       }
     }
 
-    _applyFileChange('ios/Flutter/Dev.xcconfig', dryRun, (content) {
-      return content.replaceAll(RegExp(r'^APP_DISPLAY_NAME=.*$', multiLine: true), 'APP_DISPLAY_NAME=$newAppName (Dev)');
-    });
-    _applyFileChange('ios/Flutter/Staging.xcconfig', dryRun, (content) {
-      return content.replaceAll(RegExp(r'^APP_DISPLAY_NAME=.*$', multiLine: true), 'APP_DISPLAY_NAME=$newAppName (Staging)');
-    });
-    _applyFileChange('ios/Flutter/Prod.xcconfig', dryRun, (content) {
-      return content.replaceAll(RegExp(r'^APP_DISPLAY_NAME=.*$', multiLine: true), 'APP_DISPLAY_NAME=$newAppName');
-    });
+    if (oldAppName != newAppName) {
+      _applyFileChange('ios/Flutter/Dev.xcconfig', dryRun, (content) {
+        return content.replaceAll(RegExp(r'^APP_DISPLAY_NAME=.*$', multiLine: true), 'APP_DISPLAY_NAME=$newAppName (Dev)');
+      });
+      _applyFileChange('ios/Flutter/Staging.xcconfig', dryRun, (content) {
+        return content.replaceAll(RegExp(r'^APP_DISPLAY_NAME=.*$', multiLine: true), 'APP_DISPLAY_NAME=$newAppName (Staging)');
+      });
+      _applyFileChange('ios/Flutter/Prod.xcconfig', dryRun, (content) {
+        return content.replaceAll(RegExp(r'^APP_DISPLAY_NAME=.*$', multiLine: true), 'APP_DISPLAY_NAME=$newAppName');
+      });
+    }
 
     // CFBundleDisplayName uses the literal name because Dev/Staging/Prod.xcconfig
     // are not yet wired to build configurations in project.pbxproj.
@@ -266,48 +326,100 @@ void main(List<String> args) {
     // NOTE: String.replaceAll does NOT interpret $1 / ${1} group references
     // (the replacement is literal), so replaceAllMapped is required here.
     const infoPlist = 'ios/Runner/Info.plist';
-    if (File(infoPlist).existsSync()) {
+    if (File(infoPlist).existsSync() && (oldAppName != newAppName || oldPkg != newPkg)) {
       _applyFileChange(infoPlist, dryRun, (content) {
         var updated = content;
-        updated = updated.replaceAllMapped(RegExp(r'(<key>CFBundleDisplayName</key>\s*<string>)[^<]*(</string>)'), (m) => '${m[1]}$newAppName${m[2]}');
-        updated = updated.replaceAllMapped(RegExp(r'(<key>CFBundleName</key>\s*<string>)[^<]*(</string>)'), (m) => '${m[1]}$newPkg${m[2]}');
+        if (oldAppName != newAppName) {
+          final escapedXmlAppName = _xmlEscape(newAppName);
+          updated = updated.replaceAllMapped(RegExp(r'(<key>CFBundleDisplayName</key>\s*<string>)[^<]*(</string>)'), (m) => '${m[1]}$escapedXmlAppName${m[2]}');
+        }
+        if (oldPkg != newPkg) {
+          updated = updated.replaceAllMapped(RegExp(r'(<key>CFBundleName</key>\s*<string>)[^<]*(</string>)'), (m) => '${m[1]}$newPkg${m[2]}');
+        }
         return updated;
       });
     }
   }
 
-  // 6. Update .env files
-  final envFiles = [
-    ('.env.dev', '$newAppName (Dev)'),
-    ('.env.example', '$newAppName (Dev)'),
-    ('.env.staging', '$newAppName (Staging)'),
-    ('.env.prod', newAppName),
-    ('.env.prod.example', newAppName),
-  ];
+  // 5. Update .env files
+  if (oldAppName != newAppName) {
+    final envFiles = [
+      ('.env.dev', '$newAppName (Dev)'),
+      ('.env.example', '$newAppName (Dev)'),
+      ('.env.staging', '$newAppName (Staging)'),
+      ('.env.prod', newAppName),
+      ('.env.prod.example', newAppName),
+    ];
 
-  for (final (fileName, envAppName) in envFiles) {
-    if (File(fileName).existsSync()) {
-      _applyFileChange(fileName, dryRun, (content) {
-        return content.replaceAll(RegExp(r'^APP_NAME=.*$', multiLine: true), 'APP_NAME=$envAppName');
+    for (final (fileName, envAppName) in envFiles) {
+      if (File(fileName).existsSync()) {
+        _applyFileChange(fileName, dryRun, (content) {
+          return content.replaceAll(RegExp(r'^APP_NAME=.*$', multiLine: true), 'APP_NAME=$envAppName');
+        });
+      }
+    }
+
+    // Handle .env.local if present
+    if (File('.env.local').existsSync()) {
+      _applyFileChange('.env.local', dryRun, (content) {
+        return content.replaceAll(RegExp(r'^APP_NAME=.*$', multiLine: true), 'APP_NAME=$newAppName');
       });
     }
   }
 
-  // Handle .env.local if present
-  if (File('.env.local').existsSync()) {
-    _applyFileChange('.env.local', dryRun, (content) {
-      return content.replaceAll(RegExp(r'^APP_NAME=.*$', multiLine: true), 'APP_NAME=$newAppName');
-    });
+  // 6. Update app constants, localizations, and test helpers (only if app name changed)
+  if (oldAppName != newAppName) {
+    // lib/core/constants/app_constants.dart
+    const appConstants = 'lib/core/constants/app_constants.dart';
+    if (File(appConstants).existsSync()) {
+      _applyFileChange(appConstants, dryRun, (content) {
+        final escaped = _escapeDartSingleQuoted(newAppName);
+        return content.replaceAllMapped(RegExp(r"(appTitle\s*=\s*')[^']*(')"), (m) => '${m[1]}$escaped${m[2]}');
+      });
+    }
+
+    // lib/app/l10n/app_en.arb and app_id.arb
+    for (final arbPath in ['lib/app/l10n/app_en.arb', 'lib/app/l10n/app_id.arb']) {
+      if (File(arbPath).existsSync()) {
+        _applyFileChange(arbPath, dryRun, (content) {
+          final escaped = _escapeJson(newAppName);
+          return content.replaceAllMapped(RegExp(r'("appName":\s*")[^"]*(")'), (m) => '${m[1]}$escaped${m[2]}');
+        });
+      }
+    }
+
+    // integration_test/app_test.dart
+    const appTest = 'integration_test/app_test.dart';
+    if (File(appTest).existsSync()) {
+      _applyFileChange(appTest, dryRun, (content) {
+        final escaped = _escapeDartSingleQuoted('$newAppName (Dev)');
+        return content.replaceAllMapped(RegExp(r'(APP_NAME=)[^\\]*(\\n)'), (m) => '${m[1]}$escaped${m[2]}');
+      });
+    }
+
+    // test/helpers/pump_app.dart
+    const pumpApp = 'test/helpers/pump_app.dart';
+    if (File(pumpApp).existsSync()) {
+      _applyFileChange(pumpApp, dryRun, (content) {
+        final escaped = _escapeDartSingleQuoted(newAppName);
+        return content.replaceAllMapped(RegExp(r'(APP_NAME=)[^\\]*(\\n)'), (m) => '${m[1]}$escaped${m[2]}');
+      });
+    }
   }
 
   // 7. Update package.json
   const packageJson = 'package.json';
-  if (File(packageJson).existsSync()) {
+  if (File(packageJson).existsSync() && (oldPkg != newPkg || oldAppName != newAppName)) {
     _applyFileChange(packageJson, dryRun, (content) {
-      final npmName = newPkg.replaceAll('_', '-');
       var updated = content;
-      updated = updated.replaceAll(RegExp(r'"name":\s*"[^"]*"'), '"name": "$npmName"');
-      updated = updated.replaceAll(RegExp(r'"description":\s*"[^"]*"'), '"description": "Script shortcuts for $newAppName"');
+      if (oldPkg != newPkg) {
+        final npmName = newPkg.replaceAll('_', '-');
+        updated = updated.replaceAll(RegExp(r'"name":\s*"[^"]*"'), '"name": "$npmName"');
+      }
+      if (oldAppName != newAppName) {
+        final escapedDesc = _escapeJson('Script shortcuts for $newAppName');
+        updated = updated.replaceAll(RegExp(r'"description":\s*"[^"]*"'), '"description": "$escapedDesc"');
+      }
       return updated;
     });
   }
@@ -325,12 +437,19 @@ void main(List<String> args) {
 
   // 8. Final verification: check for leftover references
   print('==> Running final verification for leftover old identifiers...');
-  final hasErrors = _verifyLeftovers(oldPkg, oldAndroidId, oldIosId);
+  final hasErrors = _verifyLeftovers(
+    oldPkg: oldPkg != newPkg ? oldPkg : null,
+    oldAndroidId: oldAndroidId != newAndroidId ? oldAndroidId : null,
+    oldIosId: oldIosId != newIosId ? oldIosId : null,
+    oldAppName: oldAppName != newAppName ? oldAppName : null,
+  );
 
-  print('\nFollow-up commands to complete synchronization:');
+  print('\nTo synchronize and verify your project in one step, run:');
+  print('  npm run sync (or dart run tool/sync.dart)');
+  print('\nOr run the individual commands:');
   print('  1. flutter clean');
   print('  2. flutter pub get');
-  print('  3. dart run tool/codegen.dart');
+  print('  3. npm run codegen (or dart run tool/codegen.dart)');
   print('  4. flutter analyze');
   print('  5. flutter test');
   print('=================================================================');
@@ -343,7 +462,11 @@ void main(List<String> args) {
 
 /// Replaces only the quoted `app_name` value of one product flavor.
 String _swapFlavorLabel(String source, String flavor, String label) {
-  return source.replaceAllMapped(RegExp('(create\\("$flavor"\\)\\s*\\{[^}]*resValue\\("string",\\s*"app_name",\\s*")[^"]*(")'), (m) => '${m[1]}$label${m[2]}');
+  final escaped = _escapeKotlinDoubleQuoted(label);
+  return source.replaceAllMapped(
+    RegExp('(create\\("$flavor"\\)\\s*\\{[^}]*resValue\\("string",\\s*"app_name",\\s*")[^"]*(")'),
+    (m) => '${m[1]}$escaped${m[2]}',
+  );
 }
 
 String _detectOldPackage() {
@@ -426,6 +549,7 @@ void _applyFileChange(String filePath, bool dryRun, String Function(String) tran
 }
 
 void _processAndroidSourceSets(String oldAndroidId, String newAndroidId, bool dryRun) {
+  if (oldAndroidId == newAndroidId) return;
   final srcDir = Directory('android/app/src');
   if (!srcDir.existsSync()) return;
 
@@ -484,7 +608,10 @@ void _cleanEmptyDirs(Directory dir) {
   }
 }
 
-bool _verifyLeftovers(String oldPkg, String oldAndroidId, String oldIosId) {
+bool _verifyLeftovers({String? oldPkg, String? oldAndroidId, String? oldIosId, String? oldAppName}) {
+  if (oldPkg == null && oldAndroidId == null && oldIosId == null && oldAppName == null) {
+    return false;
+  }
   var hasErrors = false;
   final root = Directory('.');
 
@@ -504,18 +631,24 @@ bool _verifyLeftovers(String oldPkg, String oldAndroidId, String oldIosId) {
 
     for (var i = 0; i < lines.length; i++) {
       final line = lines[i];
-      final containsOldPkg = line.contains(oldPkg);
-      final containsOldAndroid = line.contains(oldAndroidId);
-      final containsOldIos = line.contains(oldIosId);
+      final containsOldPkg = oldPkg != null && line.contains(oldPkg);
+      final containsOldAndroid = oldAndroidId != null && line.contains(oldAndroidId);
+      final containsOldIos = oldIosId != null && line.contains(oldIosId);
+      final containsOldAppName = oldAppName != null && line.contains(oldAppName);
+
+      final location = '$normPath:${i + 1}: ${line.trim()}';
 
       if (containsOldPkg || containsOldAndroid || containsOldIos) {
-        final location = '$normPath:${i + 1}: ${line.trim()}';
         if (isMarkdownDoc) {
           print('[WARNING] Leftover in documentation: $location');
         } else {
           stderr.writeln('[ERROR] Leftover in source: $location');
           hasErrors = true;
         }
+      }
+
+      if (containsOldAppName) {
+        print('[WARNING] Leftover app name: $location');
       }
     }
   }

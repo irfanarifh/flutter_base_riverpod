@@ -23,6 +23,7 @@
     "splash": "dart run flutter_native_splash:create",
     "feature": "dart run tool/new_feature.dart",
     "rename": "dart run tool/rename_project.dart",
+    "sync": "dart run tool/sync.dart",
     "get": "flutter pub get",
     "clean": "flutter clean",
     "clean:get": "flutter clean && flutter pub get",

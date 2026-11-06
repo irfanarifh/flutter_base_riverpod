@@ -548,17 +548,22 @@ The script automatically detects current identifiers dynamically and updates:
 - `name` and `description` in `package.json`
 - Scans all files for old leftovers upon completion
 
-After running the script, re-synchronize the project:
+After running the script, re-synchronize and validate the project in one command:
 
 ```bash
-# Via npm
-npm run get
-npm run codegen
-npm test
+# In one step (flutter clean -> pub get -> codegen -> analyze -> test)
+dart run tool/sync.dart
+# Or via npm
+npm run sync
+```
 
-# Or via standard Flutter/Dart commands
+Or execute the steps individually:
+
+```bash
+flutter clean
 flutter pub get
 dart run tool/codegen.dart
+flutter analyze
 flutter test
 ```
 
@@ -725,6 +730,7 @@ Run `npm run` without arguments in your terminal to see the full list of availab
 | `npm run clean` | `flutter clean` | Deletes build outputs and cached compiler artifacts |
 | `npm run clean:get` | `flutter clean && flutter pub get` | Cleans build cache and re-downloads dependencies |
 | `npm run fresh` | `flutter clean && flutter pub get && dart run tool/codegen.dart` | Complete project reset and full code regeneration |
+| `npm run sync` | `dart run tool/sync.dart` | Full pipeline: `clean` → `pub get` → `codegen` → `analyze` → `test` |
 | `npm run feature <name>` | `dart run tool/new_feature.dart <name>` | Scaffolds standard feature module structure (`data`, `model`, `controller`, `view`) |
 | `npm run rename <pkg> "<Name>" <android_id> [ios_id]` | `dart run tool/rename_project.dart ...` | Renames project identifiers across Android, iOS, `.env`, Dart imports, and `package.json` |
 

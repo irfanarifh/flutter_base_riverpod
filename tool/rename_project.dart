@@ -96,9 +96,9 @@ void main(List<String> args) {
     }
   }
 
-  final dryRun = flags.contains('--dry-run');
-  final yes = flags.contains('--yes');
-  final force = flags.contains('--force');
+  final dryRun = flags.contains('--dry-run') || Platform.environment['npm_config_dry_run'] == 'true';
+  final yes = flags.contains('--yes') || Platform.environment['npm_config_yes'] == 'true';
+  final force = flags.contains('--force') || Platform.environment['npm_config_force'] == 'true';
 
   if (positional.length < 3) {
     print('Usage: dart run tool/rename_project.dart <package_name> "<App Name>" <android_id> [ios_bundle_id] [--yes] [--dry-run] [--force]');
